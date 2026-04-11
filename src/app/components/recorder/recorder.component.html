@@ -1,0 +1,59 @@
+<button
+  (click)="toggleRecording()"
+  [disabled]="speechService.state === 'unsupported'"
+  class="flex items-center justify-center bg-primary text-background rounded w-16 h-16 shadow-[0_0_30px_var(--color-primary-glow)] active:scale-95 transition-all duration-300 border-4 border-background hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:brightness-100"
+  [attr.aria-label]="ariaLabel()"
+  [attr.aria-pressed]="isRecording()"
+>
+  <canvas
+    #canvas
+    [class.opacity-100]="isRecording()"
+    [class.opacity-0]="!isRecording()"
+    class="absolute w-32 h-12 transition-opacity duration-500"
+    width="128"
+    height="48"
+    aria-hidden="true"
+  ></canvas>
+
+  <svg
+    *ngIf="!isRecording()"
+    class="w-8 h-8 relative z-10 material-symbols-outlined text-3xl font-bold"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
+    ></path>
+  </svg>
+
+  <svg
+    *ngIf="isRecording()"
+    class="w-8 h-8 relative z-10 material-symbols-outlined text-3xl font-bold"
+    fill="currentColor"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+  >
+    <rect x="6" y="6" width="12" height="12" rx="2"></rect>
+  </svg>
+</button>
+
+<p
+  *ngIf="statusText()"
+  class="absolute -bottom-10 left-1/2 -translate-x-1/2 text-xs text-on-surface-variant whitespace-nowrap"
+  aria-live="polite"
+>
+  {{ statusText() }}
+</p>
+
+<div
+  *ngIf="speechService.state === 'error' && speechService.error"
+  class="absolute -bottom-12 left-1/2 -translate-x-1/2 bg-surface border border-primary/50 px-4 py-2 rounded text-xs text-primary whitespace-nowrap"
+  role="alert"
+>
+  {{ speechService.error.message }}
+</div>
