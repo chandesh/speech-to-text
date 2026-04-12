@@ -1,4 +1,4 @@
-# Voice to Text
+# Speech to Text
 
 A production-ready, mobile-first web application that converts speech to text in real-time using the Web Speech API. Built with Angular 21, Tailwind CSS, and designed for future backend integration.
 
@@ -90,6 +90,7 @@ make docker-down
 ```
 
 The application will be available at:
+
 - Production: http://localhost:4200
 - Development: http://localhost:4201
 
@@ -110,6 +111,7 @@ The `SpeechService` facade manages state using Angular Signals and delegates spe
 ### State Management
 
 All UI state is managed through Angular Signals:
+
 - `finalTextSignal` - Completed transcription text
 - `interimTextSignal` - In-progress speech recognition
 - `stateSignal` - Recording state (idle, requesting, recording, error, unsupported)
@@ -120,6 +122,7 @@ All UI state is managed through Angular Signals:
 ### Responsive Design
 
 Mobile-first layout with Tailwind CSS:
+
 - Sticky controls at bottom for easy thumb access
 - Large touch-friendly buttons (minimum 44px touch targets)
 - Flexible transcription area with auto-scroll
@@ -130,6 +133,7 @@ Mobile-first layout with Tailwind CSS:
 ### Environment Settings
 
 Settings are persisted in localStorage:
+
 - `voice-to-text-lang` - Selected language code (default: en-US)
 - `voice-to-text-provider` - Speech provider type (browser/api)
 - `voice-to-text-dark-mode` - Dark mode preference
@@ -152,6 +156,7 @@ ng test --include=src/app/services/speech/speech.service.spec.ts
 ```
 
 Test coverage includes:
+
 - SpeechService state management
 - BrowserSpeechService observables
 - Component creation and injection
@@ -161,6 +166,7 @@ Test coverage includes:
 ## PWA Support
 
 The application includes full PWA configuration:
+
 - Service Worker for offline caching
 - Web App Manifest with icons
 - Theme color and display mode
@@ -178,6 +184,7 @@ audio: audio/webm file
 ```
 
 Response:
+
 ```json
 {
   "transcript": "Transcribed text here"
@@ -185,27 +192,28 @@ Response:
 ```
 
 To switch to API mode:
+
 1. Set `voice-to-text-provider` to `api` in localStorage
 2. Configure `voice-to-text-api-url` with backend URL
 3. The app will stream audio chunks to the backend endpoint
 
 ## Makefile Commands
 
-| Command | Description |
-|---------|-------------|
-| `make install` | Install npm dependencies |
-| `make start` | Start Angular dev server |
-| `make test` | Run unit tests |
-| `make test:watch` | Run tests in watch mode |
-| `make build` | Production build |
-| `make clean` | Remove build artifacts |
-| `make docker-build` | Build Docker image |
-| `make docker-up` | Start production container |
-| `make docker-dev-up` | Start dev container with hot-reload |
-| `make docker-down` | Stop containers |
-| `make docker-rebuild` | Rebuild and restart |
-| `make docker-logs` | View container logs |
-| `make docker-clean` | Remove all Docker resources |
+| Command               | Description                         |
+| --------------------- | ----------------------------------- |
+| `make install`        | Install npm dependencies            |
+| `make start`          | Start Angular dev server            |
+| `make test`           | Run unit tests                      |
+| `make test:watch`     | Run tests in watch mode             |
+| `make build`          | Production build                    |
+| `make clean`          | Remove build artifacts              |
+| `make docker-build`   | Build Docker image                  |
+| `make docker-up`      | Start production container          |
+| `make docker-dev-up`  | Start dev container with hot-reload |
+| `make docker-down`    | Stop containers                     |
+| `make docker-rebuild` | Rebuild and restart                 |
+| `make docker-logs`    | View container logs                 |
+| `make docker-clean`   | Remove all Docker resources         |
 
 ## Browser Support
 
