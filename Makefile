@@ -44,7 +44,7 @@ clean:
 	rm -rf dist/ node_modules/
 
 build-image:
-	docker build -t speech-to-text:latest .
+	docker build -t speech-to-text:latest --load .
 
 start:
 	docker compose up -d speech-to-text

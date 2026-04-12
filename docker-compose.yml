@@ -1,5 +1,6 @@
 services:
   speech-to-text:
+    image: speech-to-text:latest
     build:
       context: .
       dockerfile: Dockerfile
@@ -26,6 +27,7 @@ services:
       - speech-to-text-net
 
   speech-to-text-dev:
+    image: speech-to-text:dev
     build:
       context: .
       dockerfile: Dockerfile.dev
@@ -45,4 +47,5 @@ services:
 
 networks:
   speech-to-text-net:
+    name: speech-to-text-net
     driver: bridge
