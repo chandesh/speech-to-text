@@ -1,6 +1,10 @@
-import { Injectable, OnDestroy } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { SpeechProvider, TranscriptResult, SpeechError } from './speech-provider.interface';
+import { Injectable, OnDestroy } from "@angular/core";
+import { Observable, Subject } from "rxjs";
+import {
+  SpeechProvider,
+  TranscriptResult,
+  SpeechError,
+} from "./speech-provider.interface";
 
 interface SpeechRecognitionAlternative {
   transcript: string;
@@ -38,7 +42,7 @@ interface SpeechRecognitionInstance {
 declare const webkitSpeechRecognition: unknown;
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class BrowserSpeechService implements SpeechProvider, OnDestroy {
   private recognition: SpeechRecognitionInstance | null = null;
@@ -47,15 +51,18 @@ export class BrowserSpeechService implements SpeechProvider, OnDestroy {
   private isRecordingSubject = new Subject<boolean>();
   private isSupportedSubject = new Subject<boolean>();
   private isCurrentlyRecording = false;
-  private finalTranscript = '';
+  private finalTranscript = "";
 
   private static readonly ERROR_MESSAGES: Record<string, string> = {
-    'no-speech': 'No speech was detected. Please try again.',
-    'audio-capture': 'No microphone was found. Please ensure a microphone is connected.',
-    'not-allowed': 'Microphone permission was denied. Please allow microphone access.',
-    network: 'A network error occurred. Please check your connection.',
-    aborted: 'Speech recognition was aborted.',
-    'service-not-allowed': 'Speech recognition service is not allowed.',
+    "no-speech": "No speech was detected. Please try again.",
+    "audio-capture":
+      "No microphone was found. Please ensure a microphone is connected.",
+    "not-allowed":
+      "Microphone permission was denied. Please allow microphone access.",
+    network:
+      "Speech recognition service is unavailable. Please check your internet connection.",
+    aborted: "Speech recognition was aborted.",
+    "service-not-allowed": "Speech recognition service is not allowed.",
   };
 
   constructor() {
@@ -96,13 +103,14 @@ export class BrowserSpeechService implements SpeechProvider, OnDestroy {
       SpeechRecognition?: new () => SpeechRecognitionInstance;
       webkitSpeechRecognition?: new () => SpeechRecognitionInstance;
     };
-    const SpeechRecognitionAPI = win.SpeechRecognition || win.webkitSpeechRecognition;
+    const SpeechRecognitionAPI =
+      win.SpeechRecognition || win.webkitSpeechRecognition;
 
     if (!SpeechRecognitionAPI) {
       this.errorSubject.next({
-        code: 'not-supported',
+        code: "not-supported",
         message:
-          'Speech recognition is not supported in this browser. Please use Chrome, Edge, or Safari.',
+          "Speech recognition is not supported in this browser. Please use Chrome, Edge, or Safari.",
       });
       return;
     }
@@ -110,10 +118,11 @@ export class BrowserSpeechService implements SpeechProvider, OnDestroy {
     this.recognition = new SpeechRecognitionAPI();
     this.recognition.continuous = true;
     this.recognition.interimResults = true;
-    this.recognition.lang = localStorage.getItem('voice-to-text-lang') || 'en-US';
+    this.recognition.lang =
+      localStorage.getItem("voice-to-text-lang") || "en-US";
 
     this.recognition.onresult = (event: SpeechRecognitionEvent) => {
-      let interimTranscript = '';
+      let interimTranscript = "";
 
       for (let i = event.resultIndex; i < event.results.length; i++) {
         const result = event.results[i];
@@ -140,10 +149,11 @@ export class BrowserSpeechService implements SpeechProvider, OnDestroy {
       this.errorSubject.next({
         code: event.error,
         message:
-          BrowserSpeechService.ERROR_MESSAGES[event.error] || `An error occurred: ${event.error}`,
+          BrowserSpeechService.ERROR_MESSAGES[event.error] ||
+          `An error occurred: ${event.error}`,
       });
 
-      if (event.error === 'not-allowed') {
+      if (event.error === "not-allowed") {
         this.isCurrentlyRecording = false;
         this.isRecordingSubject.next(false);
       }
@@ -160,12 +170,12 @@ export class BrowserSpeechService implements SpeechProvider, OnDestroy {
     try {
       this.recognition.start();
       this.isCurrentlyRecording = true;
-      this.finalTranscript = '';
+      this.finalTranscript = "";
       this.isRecordingSubject.next(true);
     } catch {
       this.errorSubject.next({
-        code: 'start-failed',
-        message: 'Failed to start recording',
+        code: "start-failed",
+        message: "Failed to start recording",
       });
     }
   }
@@ -179,7 +189,7 @@ export class BrowserSpeechService implements SpeechProvider, OnDestroy {
   }
 
   resetTranscript(): void {
-    this.finalTranscript = '';
+    this.finalTranscript = "";
   }
 
   setLanguage(lang: string): void {

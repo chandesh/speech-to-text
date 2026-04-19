@@ -8,8 +8,9 @@ A production-ready, mobile-first web application that converts speech to text in
 - Copy, clear, and download transcribed text
 - Word count display
 - Language selection (20+ languages)
-- Dark mode toggle
-- Mobile-first responsive design
+  - Theme selection (Gruvbox, Glassmorphic, Light, Dark, Oceanic-Light, Oceanic-Dark)
+  - Mobile-first responsive design
+
 - PWA support with offline capability
 - Pluggable speech provider architecture (browser API ready, backend stub prepared)
 
@@ -59,8 +60,8 @@ src/app/
 # Install dependencies
 make install
 
-# Start development server
-make start
+# Start Angular dev server (Host machine)
+make dev
 
 # Run tests
 make test
@@ -72,21 +73,20 @@ make build
 ### Docker Deployment
 
 ```bash
-# Build and start production container
-make docker-build
-make docker-up
+# Start production container
+make start
 
-# Or build and start in one command
-make docker-rebuild
+# Rebuild and restart production container
+make rebuild
 
-# Start development container with hot-reload
-make docker-dev-up
+# Start development container with hot-reload (Port 4201)
+make devstart
 
 # View logs
-make docker-logs
+make logs
 
 # Stop containers
-make docker-down
+make stop
 ```
 
 The application will be available at:

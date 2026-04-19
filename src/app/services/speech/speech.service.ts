@@ -1,34 +1,44 @@
-import { Injectable, signal, computed, inject, OnDestroy } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { Injectable, signal, computed, inject, OnDestroy } from "@angular/core";
+import { Subject, takeUntil } from "rxjs";
 import {
   SpeechProvider,
   TranscriptResult,
   SpeechError,
   RecordingState,
-} from './speech-provider.interface';
-import { BrowserSpeechService } from './browser-speech.service';
+} from "./speech-provider.interface";
+import { BrowserSpeechService } from "./browser-speech.service";
 
-export type Theme = 'gruvbox' | 'glassmorphic' | 'light' | 'dark';
+export type ThemeFamily = "gruvbox" | "glassmorphic" | "oceanic";
+export type ThemeMode = "light" | "dark";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class SpeechService implements OnDestroy {
   private speechProvider: SpeechProvider;
   private destroy$ = new Subject<void>();
 
-  private finalTextSignal = signal('');
-  private interimTextSignal = signal('');
-  private stateSignal = signal<RecordingState>('idle');
+  private finalTextSignal = signal("");
+  private interimTextSignal = signal("");
+  private stateSignal = signal<RecordingState>("idle");
   private errorSignal = signal<SpeechError | null>(null);
   private isSupportedSignal = signal(true);
-  private languageSignal = signal('en-US');
-  private themeSignal = signal<Theme>('gruvbox');
+  private languageSignal = signal("en-US");
+  private themeFamilySignal = signal<ThemeFamily>("gruvbox");
+  private themeModeSignal = signal<ThemeMode>("dark");
 
-  displayText = computed(() => this.finalTextSignal() + this.interimTextSignal());
+  displayText = computed(
+    () => this.finalTextSignal() + this.interimTextSignal(),
+  );
   wordCount = computed(() => {
     const text = this.finalTextSignal().trim();
     return text ? text.split(/\s+/).length : 0;
+  });
+
+  activeTheme = computed(() => {
+    const family = this.themeFamilySignal();
+    const mode = this.themeModeSignal();
+    return `${family}-${mode}`;
   });
 
   constructor() {
@@ -38,39 +48,44 @@ export class SpeechService implements OnDestroy {
   }
 
   private initializeFromStorage(): void {
-    const savedLang = localStorage.getItem('voice-to-text-lang');
-    const savedTheme = localStorage.getItem('voice-to-text-theme') as Theme | null;
+    const savedLang = localStorage.getItem("voice-to-text-lang");
+    const savedTheme = localStorage.getItem("voice-to-text-theme");
 
     if (savedLang) {
       this.languageSignal.set(savedLang);
     }
 
     if (savedTheme) {
-      this.themeSignal.set(savedTheme);
-      this.applyTheme(savedTheme);
+      const parts = savedTheme.split('-');
+      if (parts.length === 2 && (parts[1] === 'light' || parts[1] === 'dark')) {
+        this.themeFamilySignal.set(parts[0] as ThemeFamily);
+        this.themeModeSignal.set(parts[1] as ThemeMode);
+      } else {
+        this.themeFamilySignal.set((savedTheme as ThemeFamily) || "gruvbox");
+        this.themeModeSignal.set("dark");
+      }
     } else {
-      this.applyTheme('gruvbox');
+      this.themeFamilySignal.set("gruvbox");
+      this.themeModeSignal.set("dark");
     }
+    
+    this.applyTheme(this.activeTheme());
   }
 
-  private applyTheme(theme: Theme): void {
+  private applyTheme(themeKey: string): void {
     const root = document.documentElement;
     root.classList.remove(
-      'dark',
-      'theme-gruvbox',
-      'theme-glassmorphic',
-      'theme-light',
-      'theme-dark',
+      "dark",
+      "theme-gruvbox",
+      "theme-glassmorphic",
+      "theme-light",
+      "theme-dark",
+      "theme-oceanic-light",
+      "theme-oceanic-dark",
     );
 
-    const themeMap: Record<Theme, string> = {
-      gruvbox: 'theme-gruvbox',
-      glassmorphic: 'theme-glassmorphic',
-      light: 'theme-light',
-      dark: 'theme-dark',
-    };
-
-    root.classList.add(themeMap[theme]);
+    const className = `theme-${themeKey}`;
+    root.classList.add(className);
   }
 
   private subscribeToProvider(): void {
@@ -79,21 +94,25 @@ export class SpeechService implements OnDestroy {
       .subscribe((result: TranscriptResult) => {
         if (result.isFinal) {
           this.finalTextSignal.set(result.text);
-          this.interimTextSignal.set('');
+          this.interimTextSignal.set("");
         } else {
-          this.interimTextSignal.set(result.text.replace(this.finalTextSignal(), ''));
+          this.interimTextSignal.set(
+            result.text.replace(this.finalTextSignal(), ""),
+          );
         }
       });
 
-    this.speechProvider.error$.pipe(takeUntil(this.destroy$)).subscribe((error: SpeechError) => {
-      this.errorSignal.set(error);
-      this.stateSignal.set('error');
-    });
+    this.speechProvider.error$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((error: SpeechError) => {
+        this.errorSignal.set(error);
+        this.stateSignal.set("error");
+      });
 
     this.speechProvider.isRecording$
       .pipe(takeUntil(this.destroy$))
       .subscribe((isRecording: boolean) => {
-        this.stateSignal.set(isRecording ? 'recording' : 'idle');
+        this.stateSignal.set(isRecording ? "recording" : "idle");
       });
 
     this.speechProvider.isSupported$
@@ -101,14 +120,14 @@ export class SpeechService implements OnDestroy {
       .subscribe((supported: boolean) => {
         this.isSupportedSignal.set(supported);
         if (!supported) {
-          this.stateSignal.set('unsupported');
+          this.stateSignal.set("unsupported");
         }
       });
   }
 
   startRecording(): void {
     this.errorSignal.set(null);
-    this.stateSignal.set('requesting');
+    this.stateSignal.set("requesting");
     this.speechProvider.startRecording();
   }
 
@@ -117,10 +136,12 @@ export class SpeechService implements OnDestroy {
   }
 
   clearText(): void {
-    this.finalTextSignal.set('');
-    this.interimTextSignal.set('');
-    if ('resetTranscript' in this.speechProvider) {
-      (this.speechProvider as { resetTranscript?: () => void }).resetTranscript?.();
+    this.finalTextSignal.set("");
+    this.interimTextSignal.set("");
+    if ("resetTranscript" in this.speechProvider) {
+      (
+        this.speechProvider as { resetTranscript?: () => void }
+      ).resetTranscript?.();
     }
   }
 
@@ -140,9 +161,9 @@ export class SpeechService implements OnDestroy {
     const text = this.displayText();
     if (!text) return;
 
-    const blob = new Blob([text], { type: 'text/plain' });
+    const blob = new Blob([text], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
     a.download = `transcription-${new Date().toISOString().slice(0, 10)}.txt`;
     document.body.appendChild(a);
@@ -153,13 +174,23 @@ export class SpeechService implements OnDestroy {
 
   setLanguage(lang: string): void {
     this.languageSignal.set(lang);
-    localStorage.setItem('voice-to-text-lang', lang);
+    localStorage.setItem("voice-to-text-lang", lang);
   }
 
-  setTheme(theme: Theme): void {
-    this.themeSignal.set(theme);
-    localStorage.setItem('voice-to-text-theme', theme);
-    this.applyTheme(theme);
+  setThemeFamily(family: ThemeFamily): void {
+    this.themeFamilySignal.set(family);
+    this.updateThemeStorage();
+  }
+
+  setThemeMode(mode: ThemeMode): void {
+    this.themeModeSignal.set(mode);
+    this.updateThemeStorage();
+  }
+
+  private updateThemeStorage(): void {
+    const themeKey = this.activeTheme();
+    localStorage.setItem("voice-to-text-theme", themeKey);
+    this.applyTheme(themeKey);
   }
 
   get state(): RecordingState {
@@ -174,8 +205,16 @@ export class SpeechService implements OnDestroy {
     return this.languageSignal();
   }
 
-  get theme(): Theme {
-    return this.themeSignal();
+  get themeFamily(): ThemeFamily {
+    return this.themeFamilySignal();
+  }
+
+  get themeMode(): ThemeMode {
+    return this.themeModeSignal();
+  }
+
+  get activeThemeValue(): string {
+    return this.activeTheme();
   }
 
   get finalText(): string {

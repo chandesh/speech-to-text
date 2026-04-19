@@ -1,4 +1,4 @@
-@use 'tailwindcss';
+@use "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -31,9 +31,9 @@
   --color-recording-800: #991b1b;
   --color-recording-900: #7f1d1d;
 
-  --font-headline: 'Manrope', sans-serif;
-  --font-body: 'JetBrains Mono', monospace;
-  --font-label: 'JetBrains Mono', monospace;
+  --font-headline: "Manrope", sans-serif;
+  --font-body: "JetBrains Mono", monospace;
+  --font-label: "JetBrains Mono", monospace;
 
   --animate-record-pulse: record-pulse 1.5s ease-in-out infinite;
 }
@@ -59,7 +59,7 @@ html {
 
 body {
   min-height: max(884px, 100dvh);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: "JetBrains Mono", monospace;
 }
 
 /* Retro console scanline effect */
@@ -71,7 +71,12 @@ body {
   height: 100%;
   background:
     linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%),
-    linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+    linear-gradient(
+      90deg,
+      rgba(255, 0, 0, 0.02),
+      rgba(0, 255, 0, 0.01),
+      rgba(0, 0, 255, 0.02)
+    );
   background-size:
     100% 4px,
     3px 100%;
@@ -93,10 +98,10 @@ body {
 
 .material-symbols-outlined {
   font-variation-settings:
-    'FILL' 0,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 24;
+    "FILL" 0,
+    "wght" 400,
+    "GRAD" 0,
+    "opsz" 24;
 }
 
 button,
@@ -223,6 +228,244 @@ a {
   color: var(--color-on-surface);
 }
 
+/* OCEANIC LIGHT THEME (SaaS Clean - Calm Ocean) */
+.theme-oceanic-light {
+  --color-background: #ebf4f6;
+  --color-surface: #ffffff;
+  --color-surface-container: #d1e3e7;
+  --color-primary: #09637e;
+  --color-primary-hover: #088395;
+  --color-secondary: #7ab2b2;
+  --color-tertiary: #b2d8d8;
+  --color-on-background: #05313c;
+  --color-on-surface: #09637e;
+  --color-on-surface-variant: #4a6e75;
+  --color-outline: #b8cacc;
+  --color-surface-variant: #dcebee;
+  --color-primary-glow: rgba(9, 99, 126, 0.2);
+  --color-primary-glow-soft: rgba(9, 99, 126, 0.1);
+
+  background-color: var(--color-background) !important;
+  color: var(--color-on-surface) !important;
+}
+
+.theme-oceanic-light body {
+  background-color: #ebf4f6 !important;
+  color: #09637e !important;
+}
+
+/* Override Global Components for Oceanic Light Theme */
+.theme-oceanic-light .bg-background {
+  background-color: var(--color-background) !important;
+}
+.theme-oceanic-light .bg-surface {
+  background-color: var(--color-surface) !important;
+}
+.theme-oceanic-light .bg-primary {
+  background-color: var(--color-primary) !important;
+}
+.theme-oceanic-light .text-primary {
+  color: var(--color-primary) !important;
+}
+.theme-oceanic-light .text-secondary {
+  color: var(--color-secondary) !important;
+}
+.theme-oceanic-light .text-on-surface {
+  color: var(--color-on-surface) !important;
+}
+.theme-oceanic-light .text-on-surface-variant {
+  color: var(--color-on-surface-variant) !important;
+}
+.theme-oceanic-light .border-outline {
+  border-color: var(--color-outline) !important;
+}
+.theme-oceanic-light .border-primary {
+  border-color: var(--color-primary) !important;
+}
+.theme-oceanic-light button {
+  background-color: var(--color-primary) !important;
+  color: #ffffff !important;
+}
+.theme-oceanic-light button:hover {
+  background-color: var(--color-primary-hover) !important;
+}
+.theme-oceanic-light .scanlines {
+  display: none !important;
+}
+
+/* OCEANIC DARK THEME (SaaS Clean - Deep Sea) */
+.theme-oceanic-dark {
+  --color-background: #051a21;
+  --color-surface: #0a252e;
+  --color-surface-container: #0d3541;
+  --color-primary: #088395;
+  --color-primary-hover: #7ab2b2;
+  --color-secondary: #09637e;
+  --color-tertiary: #3d676e;
+  --color-on-background: #ebf4f6;
+  --color-on-surface: #ebf4f6;
+  --color-on-surface-variant: #7ab2b2;
+  --color-outline: #1a3a41;
+  --color-surface-variant: #122d36;
+  --color-primary-glow: rgba(8, 131, 149, 0.3);
+  --color-primary-glow-soft: rgba(8, 131, 149, 0.1);
+
+  background-color: var(--color-background) !important;
+  color: var(--color-on-surface) !important;
+}
+
+.theme-oceanic-dark body {
+  background-color: #051a21 !important;
+  color: #ebf4f6 !important;
+}
+
+/* Override Global Components for Oceanic Dark Theme */
+.theme-oceanic-dark .bg-background {
+  background-color: var(--color-background) !important;
+}
+.theme-oceanic-dark .bg-surface {
+  background-color: var(--color-surface) !important;
+}
+.theme-oceanic-dark .bg-primary {
+  background-color: var(--color-primary) !important;
+}
+.theme-oceanic-dark .text-primary {
+  color: var(--color-primary) !important;
+}
+.theme-oceanic-dark .text-secondary {
+  color: var(--color-secondary) !important;
+}
+.theme-oceanic-dark .text-on-surface {
+  color: var(--color-on-surface) !important;
+}
+.theme-oceanic-dark .text-on-surface-variant {
+  color: var(--color-on-surface-variant) !important;
+}
+.theme-oceanic-dark .border-outline {
+  border-color: var(--color-outline) !important;
+}
+.theme-oceanic-dark .border-primary {
+  border-color: var(--color-primary) !important;
+}
+.theme-oceanic-dark button {
+  background-color: var(--color-primary) !important;
+  color: #051a21 !important;
+}
+.theme-oceanic-dark button:hover {
+  background-color: var(--color-primary-hover) !important;
+}
+.theme-oceanic-dark .scanlines {
+  display: none !important;
+}
+
+.theme-oceanic-light body {
+  background-color: #ebf4f6 !important;
+  color: #09637e !important;
+}
+
+/* Override Global Components for Oceanic Theme - Backgrounds */
+.theme-oceanic-light .bg-background {
+  background-color: var(--color-background) !important;
+}
+.theme-oceanic-light .bg-surface {
+  background-color: var(--color-surface) !important;
+}
+.theme-oceanic-light .bg-primary {
+  background-color: var(--color-primary) !important;
+}
+
+/* Text Colors */
+.theme-oceanic-light .text-primary {
+  color: var(--color-primary) !important;
+}
+.theme-oceanic-light .text-secondary {
+  color: var(--color-secondary) !important;
+}
+.theme-oceanic-light .text-on-surface {
+  color: var(--color-on-surface) !important;
+}
+.theme-oceanic-light .text-on-surface-variant {
+  color: var(--color-on-surface-variant) !important;
+}
+
+/* Borders */
+.theme-oceanic-light .border {
+  /* Tailwind's border utilities set border-color via --tw-border-opacity and border-color: theme('colors.transparent', ...)
+   * Overriding border-color directly should work with opacity utilities.
+   */
+  border-color: var(--color-outline) !important;
+}
+.theme-oceanic-light .border-outline {
+  border-color: var(--color-outline) !important;
+}
+.theme-oceanic-light .border-primary {
+  border-color: var(--color-primary) !important;
+}
+
+/* Ring effects (for focus states) */
+.theme-oceanic-light .ring-primary {
+  --tw-ring-color: var(--color-primary) !important;
+}
+
+/* Buttons */
+.theme-oceanic-light button {
+  background-color: var(--color-primary) !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+}
+.theme-oceanic-light button:hover {
+  background-color: var(--color-primary-hover) !important;
+}
+.theme-oceanic-light button:focus {
+  outline: none !important;
+  ring: 2px !important;
+  ring-color: var(--color-primary) !important;
+  ring-offset: 2px !important;
+}
+
+/* Input fields */
+.theme-oceanic-light input,
+.theme-oceanic-light textarea,
+.theme-oceanic-light select {
+  background-color: var(--color-surface) !important;
+  border-color: var(--color-outline) !important;
+  color: var(--color-on-surface) !important;
+}
+.theme-oceanic-light input:focus,
+.theme-oceanic-light textarea:focus,
+.theme-oceanic-light select:focus {
+  outline: none !important;
+  ring: 2px !important;
+  ring-color: var(--color-primary) !important;
+  ring-offset: 2px !important;
+}
+
+/* Placeholder text */
+.theme-oceanic-light input::placeholder,
+.theme-oceanic-light textarea::placeholder {
+  color: var(--color-on-surface-variant) !important;
+  opacity: 1 !important;
+}
+
+/* Override scanlines for oceanic theme (optional - keep or remove) */
+.theme-oceanic-light .scanlines {
+  display: none !important;
+}
+
+/* Override specific container classes used in app.html */
+.theme-oceanic-light .bg-surface\/30 {
+  /* This is a tricky one because Tailwind generates .bg-surface\/30 as background-color: rgb(255 255 255 / 0.3);
+   * We want it to be rgb(235 244 246 / 0.3). Since we can't easily override the generated class,
+   * we rely on the fact that the background-color of the element is set to var(--color-background) via .bg-background
+   * and the opacity utility modifies that. However, the class .bg-surface\/30 explicitly sets the background.
+   * We need to override it.
+   * We'll use the same pattern: set the background-color to our surface with the same opacity via a variable?
+   * Instead, we can override the rgba value by setting the background-color to our color and letting the opacity utility work?
+   * But the class .bg-surface\/30 is not a utility we can override easily because it's not a class we can target with !important without knowing the exact string.
+   * We'll target the attribute selector for classes containing "bg-surface/".
+   */
+}
+
 .theme-light body {
   background-color: #ffffff !important;
 }
@@ -269,5 +512,9 @@ html.theme-light {
 }
 
 html.theme-dark {
+  background-color: var(--color-background);
+}
+
+html.theme-oceanic-light {
   background-color: var(--color-background);
 }
