@@ -1,5 +1,48 @@
 @use "tailwindcss";
 
+/* Add custom Tailwind utilities that use CSS variables */
+@layer utilities {
+  .bg-background {
+    background-color: var(--color-background) !important;
+  }
+  
+  .bg-surface {
+    background-color: var(--color-surface) !important;
+  }
+  
+  .bg-surface-container {
+    background-color: var(--color-surface-container) !important;
+  }
+  
+  .text-on-background {
+    color: var(--color-on-background) !important;
+  }
+  
+  .text-on-surface {
+    color: var(--color-on-surface) !important;
+  }
+  
+  .text-on-surface-variant {
+    color: var(--color-on-surface-variant) !important;
+  }
+  
+  .text-primary {
+    color: var(--color-primary) !important;
+  }
+  
+  .text-secondary {
+    color: var(--color-secondary) !important;
+  }
+  
+  .border-outline {
+    border-color: var(--color-outline) !important;
+  }
+  
+  .border-primary {
+    border-color: var(--color-primary) !important;
+  }
+}
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
@@ -114,6 +157,114 @@ a {
    ============================================ */
 
 /* GRUVBOX THEME (Default - Dark Retro) */
+.theme-gruvbox-dark {
+  --color-background: #1d2021;
+  --color-surface: #282828;
+  --color-surface-container: #3c3836;
+  --color-primary: #fb4934;
+  --color-secondary: #fabd2f;
+  --color-tertiary: #8ec07c;
+  --color-on-background: #ebdbb2;
+  --color-on-surface: #ebdbb2;
+  --color-on-surface-variant: #a89984;
+  --color-outline: #665c54;
+  --color-surface-variant: #504945;
+  --color-primary-container: #cc241d;
+  --color-on-primary-container: #fbf1c7;
+  --color-primary-glow: rgba(251, 73, 52, 0.4);
+  --color-primary-glow-soft: rgba(251, 73, 52, 0.15);
+  background-color: var(--color-background) !important;
+  color: var(--color-on-surface) !important;
+}
+
+/* GRUVBOX LIGHT THEME */
+.theme-gruvbox-light {
+  --color-background: #fbf1c7;
+  --color-surface: #f9f5d7;
+  --color-surface-container: #ebdbb2;
+  --color-primary: #cc241d;
+  --color-secondary: #d79921;
+  --color-tertiary: #689d6a;
+  --color-on-background: #3c3836;
+  --color-on-surface: #3c3836;
+  --color-on-surface-variant: #7c6f64;
+  --color-outline: #a89984;
+  --color-surface-variant: #d5c4a1;
+  --color-primary-container: #fb4934;
+  --color-on-primary-container: #1d2021;
+  --color-primary-glow: rgba(204, 36, 29, 0.3);
+  --color-primary-glow-soft: rgba(204, 36, 29, 0.15);
+  background-color: var(--color-background) !important;
+  color: var(--color-on-surface) !important;
+}
+
+/* GRUVBOX THEME (Default - Dark Retro) - legacy alias */
+.theme-gruvbox {
+  --color-background: #1d2021;
+  --color-surface: #282828;
+  --color-surface-container: #3c3836;
+  --color-primary: #fb4934;
+  --color-secondary: #fabd2f;
+  --color-tertiary: #8ec07c;
+  --color-on-background: #ebdbb2;
+  --color-on-surface: #ebdbb2;
+  --color-on-surface-variant: #a89984;
+  --color-outline: #665c54;
+  --color-surface-variant: #504945;
+  --color-primary-container: #cc241d;
+  --color-on-primary-container: #fbf1c7;
+  --color-primary-glow: rgba(251, 73, 52, 0.4);
+  --color-primary-glow-soft: rgba(251, 73, 52, 0.15);
+  background-color: var(--color-background) !important;
+  color: var(--color-on-surface) !important;
+}
+
+/* GRUVBOX LIGHT THEME */
+.theme-gruvbox-light {
+  --color-background: #fbf1c7;
+  --color-surface: #f9f5d7;
+  --color-surface-container: #ebdbb2;
+  --color-primary: #cc241d;
+  --color-secondary: #d79921;
+  --color-tertiary: #689d6a;
+  --color-on-background: #3c3836;
+  --color-on-surface: #3c3836;
+  --color-on-surface-variant: #7c6f64;
+  --color-outline: #a89984;
+  --color-surface-variant: #d5c4a1;
+  --color-primary-container: #fb4934;
+  --color-on-primary-container: #1d2021;
+  --color-primary-glow: rgba(204, 36, 29, 0.3);
+  --color-primary-glow-soft: rgba(204, 36, 29, 0.15);
+  background-color: var(--color-background) !important;
+  color: var(--color-on-surface) !important;
+}
+
+/* Override Tailwind background utilities for gruvbox-light */
+.theme-gruvbox-light body,
+.theme-gruvbox-light .bg-background {
+  background-color: var(--color-background) !important;
+  color: var(--color-on-surface) !important;
+}
+
+.theme-gruvbox-light .bg-surface {
+  background-color: var(--color-surface) !important;
+  color: var(--color-on-surface) !important;
+}
+
+.theme-gruvbox-light .bg-surface-container {
+  background-color: var(--color-surface-container) !important;
+}
+
+.theme-gruvbox-light .text-on-surface {
+  color: var(--color-on-surface) !important;
+}
+
+.theme-gruvbox-light .text-primary {
+  color: var(--color-primary) !important;
+}
+
+/* GRUVBOX THEME (Default - Dark Retro) - legacy alias */
 .theme-gruvbox {
   --color-background: #1d2021;
   --color-surface: #282828;
@@ -135,6 +286,112 @@ a {
 }
 
 /* GLASSMORPHIC THEME (Apple Style - White) */
+.theme-glassmorphic-dark {
+  --color-background: #000000;
+  --color-surface: rgba(30, 30, 30, 0.7);
+  --color-surface-container: rgba(40, 40, 40, 0.5);
+  --color-primary: #0a84ff;
+  --color-secondary: #bf5af2;
+  --color-tertiary: #30d89b;
+  --color-on-background: #f5f5f7;
+  --color-on-surface: #f5f5f7;
+  --color-on-surface-variant: #86868b;
+  --color-outline: rgba(255, 255, 255, 0.1);
+  --color-surface-variant: rgba(30, 30, 30, 0.6);
+  --color-primary-glow: rgba(10, 132, 255, 0.2);
+  --color-primary-glow-soft: rgba(10, 132, 255, 0.1);
+  background-color: #1d1d1f !important;
+  color: var(--color-on-surface) !important;
+}
+
+/* GLASSMORPHIC LIGHT THEME */
+.theme-glassmorphic-light {
+  --color-background: #ffffff;
+  --color-surface: rgba(255, 255, 255, 0.7);
+  --color-surface-container: rgba(255, 255, 255, 0.5);
+  --color-primary: #0071e3;
+  --color-secondary: #5856d6;
+  --color-tertiary: #34c759;
+  --color-on-background: #1d1d1f;
+  --color-on-surface: #1d1d1f;
+  --color-on-surface-variant: #86868b;
+  --color-outline: rgba(0, 0, 0, 0.1);
+  --color-surface-variant: rgba(255, 255, 255, 0.6);
+  --color-primary-glow: rgba(0, 113, 227, 0.2);
+  --color-primary-glow-soft: rgba(0, 113, 227, 0.1);
+  background-color: #f5f5f7 !important;
+  color: var(--color-on-surface) !important;
+}
+
+/* GLASSMORPHIC THEME (Apple Style - White) - legacy alias */
+.theme-glassmorphic {
+  --color-background: #ffffff;
+  --color-surface: rgba(255, 255, 255, 0.7);
+  --color-surface-container: rgba(255, 255, 255, 0.5);
+  --color-primary: #0071e3;
+  --color-secondary: #5856d6;
+  --color-tertiary: #34c759;
+  --color-on-background: #1d1d1f;
+  --color-on-surface: #1d1d1f;
+  --color-on-surface-variant: #86868b;
+  --color-outline: rgba(0, 0, 0, 0.1);
+  --color-surface-variant: rgba(255, 255, 255, 0.6);
+  --color-primary-glow: rgba(0, 113, 227, 0.2);
+  --color-primary-glow-soft: rgba(0, 113, 227, 0.1);
+  background-color: #f5f5f7 !important;
+  color: var(--color-on-surface) !important;
+}
+
+/* GLASSMORPHIC LIGHT THEME */
+.theme-glassmorphic-light {
+  --color-background: #ffffff;
+  --color-surface: rgba(255, 255, 255, 0.7);
+  --color-surface-container: rgba(255, 255, 255, 0.5);
+  --color-primary: #0071e3;
+  --color-secondary: #5856d6;
+  --color-tertiary: #34c759;
+  --color-on-background: #1d1d1f;
+  --color-on-surface: #1d1d1f;
+  --color-on-surface-variant: #86868b;
+  --color-outline: rgba(0, 0, 0, 0.1);
+  --color-surface-variant: rgba(255, 255, 255, 0.6);
+  --color-primary-glow: rgba(0, 113, 227, 0.2);
+  --color-primary-glow-soft: rgba(0, 113, 227, 0.1);
+  background-color: #f5f5f7 !important;
+  color: var(--color-on-surface) !important;
+}
+
+/* Override Tailwind background utilities for glassmorphic-light */
+.theme-glassmorphic-light body,
+.theme-glassmorphic-light .bg-background {
+  background-color: #f5f5f7 !important;
+  color: var(--color-on-surface) !important;
+}
+
+.theme-glassmorphic-light .bg-surface {
+  background: var(--color-surface) !important;
+  backdrop-filter: blur(27px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(27px) saturate(180%) !important;
+  border: 1px solid var(--color-outline) !important;
+  color: var(--color-on-surface) !important;
+}
+
+.theme-glassmorphic-light .bg-surface-container {
+  background: var(--color-surface-container) !important;
+  backdrop-filter: blur(27px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(27px) saturate(180%) !important;
+  border: 1px solid var(--color-outline) !important;
+}
+
+.theme-glassmorphic-light .text-on-surface {
+  color: var(--color-on-surface) !important;
+}
+
+.theme-glassmorphic-light .text-primary {
+  color: var(--color-primary) !important;
+}
+
+/* GLASSMORPHIC THEME (Apple Style - White) - legacy alias */
 .theme-glassmorphic {
   --color-background: #ffffff;
   --color-surface: rgba(255, 255, 255, 0.7);
@@ -499,6 +756,36 @@ a {
 }
 
 /* Force background colors for theme classes on html */
+html.theme-gruvbox-dark {
+  background-color: var(--color-background);
+}
+
+html.theme-gruvbox-light {
+  background-color: var(--color-background);
+}
+
+html.theme-glassmorphic-dark {
+  background-color: #1d1d1f;
+}
+
+html.theme-glassmorphic-light {
+  background-color: #f5f5f7;
+}
+
+html.theme-oceanic-light {
+  background-color: var(--color-background);
+}
+
+html.theme-oceanic-dark {
+  background-color: var(--color-background);
+}
+
+/* Add missing oceanic theme combinations */
+html.theme-oceanic {
+  background-color: var(--color-background);
+}
+
+/* Legacy aliases */
 html.theme-gruvbox {
   background-color: var(--color-background);
 }
@@ -512,9 +799,5 @@ html.theme-light {
 }
 
 html.theme-dark {
-  background-color: var(--color-background);
-}
-
-html.theme-oceanic-light {
   background-color: var(--color-background);
 }

@@ -56,12 +56,22 @@ export class SpeechService implements OnDestroy {
     }
 
     if (savedTheme) {
+      // Try to parse the theme key format (family-mode)
       const parts = savedTheme.split('-');
       if (parts.length === 2 && (parts[1] === 'light' || parts[1] === 'dark')) {
-        this.themeFamilySignal.set(parts[0] as ThemeFamily);
-        this.themeModeSignal.set(parts[1] as ThemeMode);
+        // Validate that the family is one of our supported families
+        const validFamilies: ThemeFamily[] = ["gruvbox", "glassmorphic", "oceanic"];
+        if (validFamilies.includes(parts[0] as ThemeFamily)) {
+          this.themeFamilySignal.set(parts[0] as ThemeFamily);
+          this.themeModeSignal.set(parts[1] as ThemeMode);
+        } else {
+          // Fallback to default
+          this.themeFamilySignal.set("gruvbox");
+          this.themeModeSignal.set("dark");
+        }
       } else {
-        this.themeFamilySignal.set((savedTheme as ThemeFamily) || "gruvbox");
+        // Handle legacy format or invalid format
+        this.themeFamilySignal.set("gruvbox");
         this.themeModeSignal.set("dark");
       }
     } else {
@@ -74,18 +84,19 @@ export class SpeechService implements OnDestroy {
 
   private applyTheme(themeKey: string): void {
     const root = document.documentElement;
-    root.classList.remove(
-      "dark",
-      "theme-gruvbox",
-      "theme-glassmorphic",
-      "theme-light",
-      "theme-dark",
-      "theme-oceanic-light",
-      "theme-oceanic-dark",
-    );
+    // Remove all theme classes (more comprehensive approach)
+    const themeClasses = Array.from(root.classList).filter(cls => cls.startsWith('theme-'));
+    root.classList.remove(...themeClasses);
+    
+    // Also remove the generic dark class if present
+    root.classList.remove("dark");
 
+    // Add the new theme class
     const className = `theme-${themeKey}`;
     root.classList.add(className);
+    
+    // Also apply the theme to the body element to ensure it takes effect
+    document.body.className = document.body.className.replace(/theme-\S+/g, '') + ' ' + className;
   }
 
   private subscribeToProvider(): void {

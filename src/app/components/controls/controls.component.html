@@ -57,7 +57,7 @@
     <button
       (click)="submitText()"
       [disabled]="!canDownload() || isSubmitting()"
-      class="flex items-center gap-2 px-3 py-1.5 text-xs font-label uppercase tracking-widest rounded bg-background/50 hover:bg-primary hover:text-background text-primary border border-primary/30 transition-all disabled:opacity-40 disabled:cursor-not-allowed ml-auto"
+      class="flex items-center gap-2 px-3 py-1.5 text-xs font-label uppercase tracking-widest rounded bg-surface hover:bg-primary text-on-surface hover:text-background border border-outline transition-all disabled:opacity-40 disabled:cursor-not-allowed ml-auto"
       aria-label="Submit transcription"
     >
       <svg
