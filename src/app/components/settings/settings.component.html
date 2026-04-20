@@ -4,7 +4,13 @@
   aria-label="Settings"
   aria-expanded="isOpen"
 >
-  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+  <svg
+    class="w-5 h-5"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+  >
     <path
       stroke-linecap="round"
       stroke-linejoin="round"
@@ -47,7 +53,8 @@
         d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
       ></path>
     </svg>
-    <span class="font-label text-[10px] uppercase tracking-[0.2em] text-primary font-bold"
+    <span
+      class="font-label text-[10px] uppercase tracking-[0.2em] text-primary font-bold"
       >System_Config</span
     >
   </div>
@@ -76,21 +83,48 @@
       <span
         class="block font-label text-[10px] uppercase tracking-[0.2em] text-on-surface-variant font-bold mb-2"
       >
-        Visual_Theme
+        Visual_Mode
       </span>
-      <div class="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Theme selection">
+      <div class="flex gap-2" role="radiogroup" aria-label="Mode selection">
         <button
-          *ngFor="let t of themes"
-          (click)="setTheme(t)"
+          *ngFor="let mode of themeModes"
+          (click)="setThemeMode(mode)"
           [class]="
-            speechService.theme === t
+            speechService.themeMode === mode
+              ? 'bg-primary text-background border-primary'
+              : 'bg-surface-container text-on-surface-variant border-outline/30 hover:border-primary/50'
+          "
+          class="flex-1 px-3 py-2 text-xs font-label uppercase tracking-widest rounded border transition-all capitalize"
+          [attr.aria-pressed]="speechService.themeMode === mode"
+        >
+          {{ mode }}
+        </button>
+      </div>
+    </div>
+
+    <div class="group">
+      <span
+        class="block font-label text-[10px] uppercase tracking-[0.2em] text-on-surface-variant font-bold mb-2"
+      >
+        Theme_Family
+      </span>
+      <div
+        class="grid grid-cols-2 gap-2"
+        role="radiogroup"
+        aria-label="Family selection"
+      >
+        <button
+          *ngFor="let family of themeFamilies"
+          (click)="setThemeFamily(family)"
+          [class]="
+            speechService.themeFamily === family
               ? 'bg-primary text-background border-primary'
               : 'bg-surface-container text-on-surface-variant border-outline/30 hover:border-primary/50'
           "
           class="px-3 py-2 text-xs font-label uppercase tracking-widest rounded border transition-all capitalize"
-          [attr.aria-pressed]="speechService.theme === t"
+          [attr.aria-pressed]="speechService.themeFamily === family"
         >
-          {{ t }}
+          {{ family }}
         </button>
       </div>
     </div>

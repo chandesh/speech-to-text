@@ -1,4 +1,4 @@
-.PHONY: help install dev test test-watch build clean build-image start stop container logs clean-docker rebuild
+.PHONY: help install dev test test-watch build clean build-image start stop restart devstart logs clean-docker rebuild
 
 .DEFAULT_GOAL := help
 
@@ -18,8 +18,9 @@ help:
 	@echo "  Docker:"
 	@echo "    make build-image   Build production Docker image"
 	@echo "    make start         Start production container (port 4200)"
-	@echo "    make container      Start dev container with hot-reload (port 4201)"
+	@echo "    make devstart      Start dev container with hot-reload (port 4201)"
 	@echo "    make stop          Stop all running containers"
+	@echo "    make restart       Restart production container"
 	@echo "    make rebuild       Rebuild and restart production container"
 	@echo "    make logs          View container logs (follow mode)"
 	@echo "    make clean-docker  Remove all Docker images, containers, and volumes"
@@ -48,15 +49,34 @@ build-image:
 
 start:
 	docker compose up -d speech-to-text
+	@echo ""
+	@echo "Application started!"
+	@echo "Access the app at: http://localhost:4200"
+	@echo ""
 
-container:
+devstart:
 	docker compose up -d speech-to-text-dev
+	@echo ""
+	@echo "Dev container started!"
+	@echo "Access the app at: http://localhost:4201"
+	@echo ""
 
 stop:
 	docker compose down
 
+restart:
+	docker compose restart speech-to-text
+	@echo ""
+	@echo "Application restarted!"
+	@echo "Access the app at: http://localhost:4200"
+	@echo ""
+
 rebuild:
 	docker compose up -d --build speech-to-text
+	@echo ""
+	@echo "Application rebuilt and restarted!"
+	@echo "Access the app at: http://localhost:4200"
+	@echo ""
 
 logs:
 	docker compose logs -f speech-to-text

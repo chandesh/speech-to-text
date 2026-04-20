@@ -76,16 +76,16 @@
 </main>
 
 <!-- Bottom Command Shell -->
-<div
-  class="fixed bottom-0 left-0 w-full z-50 flex flex-col md:flex-row justify-center items-center pb-8 px-6 md:px-10 pointer-events-none gap-4"
+<footer
+  class="fixed bottom-0 left-0 w-full z-50 flex flex-col md:flex-row justify-center items-center pb-12 px-6 md:px-10 pointer-events-none gap-4"
 >
   <!-- Controls Container -->
-  <div class="flex-1 w-full max-w-2xl pointer-events-auto">
+  <div class="flex-1 w-full max-w-2xl pointer-events-auto mb-4 md:mb-0">
     <app-controls></app-controls>
   </div>
 
   <!-- Voice Activation Orb -->
-  <div class="pointer-events-auto">
+  <div class="pointer-events-auto flex items-center justify-center">
     <app-recorder></app-recorder>
   </div>
-</div>
+</footer>
