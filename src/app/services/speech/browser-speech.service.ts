@@ -74,8 +74,18 @@ export class BrowserSpeechService implements SpeechProvider, OnDestroy {
       SpeechRecognition?: unknown;
       webkitSpeechRecognition?: unknown;
     };
+    
+    const isSecureContext = window.isSecureContext;
     const supported = !!(win.SpeechRecognition || win.webkitSpeechRecognition);
-    this.isSupportedSubject.next(supported);
+    
+    if (!isSecureContext) {
+      this.errorSubject.next({
+        code: "insecure-context",
+        message: "Web Speech API requires a secure context (HTTPS). Try accessing via HTTPS or check browser permissions."
+      });
+    }
+    
+    this.isSupportedSubject.next(supported && isSecureContext);
   }
 
   get transcript$(): Observable<TranscriptResult> {
@@ -146,6 +156,17 @@ export class BrowserSpeechService implements SpeechProvider, OnDestroy {
     };
 
     this.recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
+      // Special handling for network errors - they might be temporary
+      if (event.error === "network") {
+        // Try to restart recognition
+        setTimeout(() => {
+          if (this.isCurrentlyRecording) {
+            this.recognition?.stop();
+            this.recognition?.start();
+          }
+        }, 1000);
+      }
+      
       this.errorSubject.next({
         code: event.error,
         message:
@@ -153,7 +174,7 @@ export class BrowserSpeechService implements SpeechProvider, OnDestroy {
           `An error occurred: ${event.error}`,
       });
 
-      if (event.error === "not-allowed") {
+      if (event.error === "not-allowed" || event.error === "network") {
         this.isCurrentlyRecording = false;
         this.isRecordingSubject.next(false);
       }
