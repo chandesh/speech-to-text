@@ -35,4 +35,4 @@ ENV NODE_ENV=development
 EXPOSE 4200
 
 # Start Angular dev server
-CMD ["npm", "run", "start", "--", "--host", "0.0.0.0", "--poll", "2000"]
+CMD ["npm", "run", "start", "--", "--host", "0.0.0.0", "--disable-host-check", "--poll", "2000"]
