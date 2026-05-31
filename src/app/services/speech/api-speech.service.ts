@@ -3,7 +3,7 @@ import { Observable, Subject } from 'rxjs';
 import { SpeechProvider, TranscriptResult, SpeechError } from './speech-provider.interface';
 
 const API_CONFIG = {
-  DEFAULT_BASE_URL: 'http://localhost:8080',
+  DEFAULT_BASE_URL: 'http://localhost:1212',
   STORAGE_KEY: 'voice-to-text-api-url',
   AUDIO_TYPE: 'audio/webm',
   CHUNK_INTERVAL: 1000,

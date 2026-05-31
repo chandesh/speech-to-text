@@ -23,7 +23,7 @@ const STORAGE_KEYS = {
   user: 's2t_user',
 };
 
-const API_BASE = 'http://localhost:8080/api';
+const API_BASE = 'http://localhost:1212/api';
 
 @Injectable({
   providedIn: 'root',

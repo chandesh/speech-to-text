@@ -125,8 +125,8 @@ backend-start:
 	docker compose up -d postgres backend
 	@echo ""
 	@echo "  PostgreSQL running on port 5432"
-	@echo "  Backend API running at: http://localhost:8080"
-	@echo "  Health check: curl http://localhost:8080/api/health"
+	@echo "  Backend API running at: http://localhost:1212"
+	@echo "  Health check: curl http://localhost:1212/api/health"
 	@echo ""
 
 backend-stop:
@@ -138,13 +138,13 @@ backend-stop:
 backend-restart:
 	docker compose restart backend
 	@echo ""
-	@echo "  Backend restarted at: http://localhost:8080"
+	@echo "  Backend restarted at: http://localhost:1212"
 	@echo ""
 
 backend-rebuild:
 	docker compose up -d --build --force-recreate backend
 	@echo ""
-	@echo "  Backend rebuilt and started at: http://localhost:8080"
+	@echo "  Backend rebuilt and started at: http://localhost:1212"
 	@echo ""
 
 backend-logs:
@@ -176,7 +176,7 @@ stack-up:
 	docker compose up -d --build speech-to-text postgres backend
 	@echo ""
 	@echo "  Frontend: http://localhost:4200"
-	@echo "  Backend:  http://localhost:8080/api/health"
+	@echo "  Backend:  http://localhost:1212/api/health"
 	@echo ""
 
 stack-down:
