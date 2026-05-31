@@ -2,13 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
-import { FooterComponent } from '../../components/footer/footer.component';
 import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   standalone: true,
   selector: 'app-home',
-  imports: [CommonModule, RouterModule, NavbarComponent, FooterComponent],
+  imports: [CommonModule, RouterModule, NavbarComponent],
   template: `
     <app-navbar></app-navbar>
     <div
@@ -132,7 +131,6 @@ import { AuthService } from '../../services/auth/auth.service';
         </div>
       </section>
     </div>
-    <app-footer></app-footer>
   `,
   styles: [],
 })
