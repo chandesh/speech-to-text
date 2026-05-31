@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/chandesh/speech-to-text/backend/apps/auth"
+	"github.com/chandesh/speech-to-text/backend/apps/user"
 	"github.com/chandesh/speech-to-text/backend/apps/auth/models"
 	"github.com/chandesh/speech-to-text/backend/core/config"
 	"github.com/chandesh/speech-to-text/backend/core/database"
@@ -27,6 +28,7 @@ func main() {
 	})
 
 	auth.RegisterRoutes(api, db, cfg.JWTSecret)
+	user.RegisterRoutes(api, db, cfg.JWTSecret)
 
 	log.Printf("Server starting on :%s", cfg.Port)
 	if err := r.Run(":" + cfg.Port); err != nil {
