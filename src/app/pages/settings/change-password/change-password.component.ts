@@ -14,10 +14,10 @@ import { AuthService } from '../../../services/auth/auth.service';
   imports: [ReactiveFormsModule, NgIf],
   template: `
     <div class="max-w-lg">
-      <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-4">
+      <h2 class="text-xl font-semibold text-on-surface mb-4">
         Change Password
       </h2>
-      <p class="text-sm text-slate-500 mb-6">
+      <p class="text-sm text-on-surface-variant mb-6">
         Enter your current password and a new password.
       </p>
 
@@ -44,14 +44,14 @@ import { AuthService } from '../../../services/auth/auth.service';
         <div>
           <label
             for="current_password"
-            class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
+            class="block text-sm font-medium text-on-surface mb-1"
             >Current Password</label
           >
           <input
             id="current_password"
             type="password"
             formControlName="current_password"
-            class="w-full px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500 transition-colors"
+            class="w-full px-4 py-2.5 bg-surface border border-outline rounded-lg text-sm text-on-surface focus:outline-none focus:border-primary transition-colors"
             [class.border-red-500]="
               passwordForm.get('current_password')?.invalid &&
               passwordForm.get('current_password')?.touched
@@ -61,25 +61,27 @@ import { AuthService } from '../../../services/auth/auth.service';
         <div>
           <label
             for="new_password"
-            class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
+            class="block text-sm font-medium text-on-surface mb-1"
             >New Password</label
           >
           <input
             id="new_password"
             type="password"
             formControlName="new_password"
-            class="w-full px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500 transition-colors"
+            class="w-full px-4 py-2.5 bg-surface border border-outline rounded-lg text-sm text-on-surface focus:outline-none focus:border-primary transition-colors"
             [class.border-red-500]="
               passwordForm.get('new_password')?.invalid &&
               passwordForm.get('new_password')?.touched
             "
           />
-          <p class="text-xs text-slate-500 mt-1">Minimum 8 characters.</p>
+          <p class="text-xs text-on-surface-variant mt-1">
+            Minimum 8 characters.
+          </p>
         </div>
         <button
           type="submit"
           [disabled]="passwordForm.invalid || isSubmitting()"
-          class="px-6 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          class="px-6 py-2.5 bg-primary text-background rounded-lg text-sm font-medium hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {{ isSubmitting() ? 'Changing...' : 'Change Password' }}
         </button>

@@ -9,16 +9,16 @@ import { AuthService } from '../../services/auth/auth.service';
   imports: [CommonModule, RouterModule],
   template: `
     <nav
-      class="sticky top-0 z-50 backdrop-blur-md bg-white/70 dark:bg-slate-900/70 border-b border-slate-200 dark:border-slate-800 px-6 py-4"
+      class="sticky top-0 z-50 backdrop-blur-md bg-background/70 border-b border-outline px-6 py-4"
     >
       <div class="max-w-7xl mx-auto flex items-center justify-between">
         <div class="flex items-center gap-8">
           <a
             [routerLink]="authService.isLoggedIn() ? '/transcriber' : '/'"
-            class="flex items-center gap-2 text-xl font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            class="flex items-center gap-2 text-xl font-bold text-on-surface hover:text-primary transition-colors"
           >
             <div
-              class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white"
+              class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-background"
             >
               S
             </div>
@@ -26,18 +26,12 @@ import { AuthService } from '../../services/auth/auth.service';
           </a>
 
           <div
-            class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600 dark:text-slate-400"
+            class="hidden md:flex items-center gap-6 text-sm font-medium text-on-surface-variant"
           >
-            <a
-              *ngIf="!authService.isLoggedIn()"
-              routerLink="/"
-              class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-              >Home</a
-            >
             <a
               *ngIf="authService.isLoggedIn()"
               routerLink="/transcriber"
-              class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+              class="hover:text-primary transition-colors"
               >Transcriber</a
             >
           </div>
@@ -50,12 +44,12 @@ import { AuthService } from '../../services/auth/auth.service';
           >
             <a
               routerLink="/login"
-              class="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors"
+              class="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors"
               >Login</a
             >
             <a
               routerLink="/register"
-              class="px-4 py-2 bg-blue-600 text-white rounded-full text-sm font-semibold hover:bg-blue-700 transition-all"
+              class="px-4 py-2 bg-primary text-background rounded-full text-sm font-semibold hover:brightness-110 transition-all"
               >Sign Up</a
             >
           </div>
@@ -63,21 +57,21 @@ import { AuthService } from '../../services/auth/auth.service';
           <div *ngIf="authService.isLoggedIn()" class="relative">
             <button
               (click)="toggleDropdown()"
-              class="flex items-center gap-2 px-3 py-2 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+              class="flex items-center gap-2 px-3 py-2 rounded-full bg-surface border border-outline hover:bg-surface-variant transition-colors"
               aria-haspopup="true"
               [attr.aria-expanded]="dropdownOpen"
             >
               <span
-                class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-bold border-2 border-white dark:border-slate-700"
+                class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-background text-sm font-bold border-2 border-background"
               >
                 {{ userInitials() }}
               </span>
               <span
-                class="hidden sm:inline text-sm font-medium text-slate-900 dark:text-white"
+                class="hidden sm:inline text-sm font-medium text-on-surface"
                 >{{ authService.currentUser()?.full_name }}</span
               >
               <svg
-                class="w-4 h-4 text-slate-500 transition-transform"
+                class="w-4 h-4 text-on-surface-variant transition-transform"
                 [class.rotate-180]="dropdownOpen"
                 fill="none"
                 stroke="currentColor"
@@ -100,22 +94,20 @@ import { AuthService } from '../../services/auth/auth.service';
 
             <div
               *ngIf="dropdownOpen"
-              class="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl z-50 py-2"
+              class="absolute right-0 top-full mt-2 w-56 bg-surface border border-outline rounded-xl shadow-xl z-50 py-2"
             >
-              <div
-                class="px-4 py-3 border-b border-slate-200 dark:border-slate-700"
-              >
-                <p class="text-sm font-medium text-slate-900 dark:text-white">
+              <div class="px-4 py-3 border-b border-outline">
+                <p class="text-sm font-medium text-on-surface">
                   {{ authService.currentUser()?.full_name }}
                 </p>
-                <p class="text-xs text-slate-500 truncate">
+                <p class="text-xs text-on-surface-variant truncate">
                   {{ authService.currentUser()?.email }}
                 </p>
               </div>
               <a
                 routerLink="/settings/profile"
                 (click)="dropdownOpen = false"
-                class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                class="flex items-center gap-3 px-4 py-2.5 text-sm text-on-surface hover:bg-surface-variant transition-colors"
               >
                 <svg
                   class="w-4 h-4"
@@ -135,7 +127,7 @@ import { AuthService } from '../../services/auth/auth.service';
               <a
                 routerLink="/settings/change-password"
                 (click)="dropdownOpen = false"
-                class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                class="flex items-center gap-3 px-4 py-2.5 text-sm text-on-surface hover:bg-surface-variant transition-colors"
               >
                 <svg
                   class="w-4 h-4"
@@ -155,7 +147,7 @@ import { AuthService } from '../../services/auth/auth.service';
               <a
                 routerLink="/settings/app-settings"
                 (click)="dropdownOpen = false"
-                class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                class="flex items-center gap-3 px-4 py-2.5 text-sm text-on-surface hover:bg-surface-variant transition-colors"
               >
                 <svg
                   class="w-4 h-4"
@@ -178,12 +170,10 @@ import { AuthService } from '../../services/auth/auth.service';
                 </svg>
                 App Settings
               </a>
-              <div
-                class="border-t border-slate-200 dark:border-slate-700 mt-2 pt-2"
-              >
+              <div class="border-t border-outline mt-2 pt-2">
                 <button
                   (click)="logout()"
-                  class="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-500 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                  class="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-500 hover:bg-surface-variant transition-colors"
                 >
                   <svg
                     class="w-4 h-4"
@@ -204,7 +194,7 @@ import { AuthService } from '../../services/auth/auth.service';
             </div>
           </div>
 
-          <button class="md:hidden p-2 text-slate-600 dark:text-slate-400">
+          <button class="md:hidden p-2 text-on-surface-variant">
             <svg
               class="w-6 h-6"
               fill="none"

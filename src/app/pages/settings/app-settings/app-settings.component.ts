@@ -12,23 +12,20 @@ import { NgFor } from '@angular/common';
   imports: [NgFor],
   template: `
     <div class="max-w-lg">
-      <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-4">
-        App Settings
-      </h2>
-      <p class="text-sm text-slate-500 mb-6">
+      <h2 class="text-xl font-semibold text-on-surface mb-4">App Settings</h2>
+      <p class="text-sm text-on-surface-variant mb-6">
         Configure theme, language, and other preferences.
       </p>
 
       <div class="space-y-6">
         <div>
-          <label
-            class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2"
+          <label class="block text-sm font-medium text-on-surface mb-2"
             >Language</label
           >
           <select
             (change)="speechService.setLanguage($any($event.target).value)"
             [value]="speechService.language"
-            class="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
+            class="w-full px-3 py-2 bg-surface border border-outline rounded-lg text-sm text-on-surface focus:outline-none focus:border-primary"
           >
             <option *ngFor="let lang of languages" [value]="lang.code">
               {{ lang.name }}
@@ -37,8 +34,7 @@ import { NgFor } from '@angular/common';
         </div>
 
         <div>
-          <span
-            class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2"
+          <span class="block text-sm font-medium text-on-surface mb-2"
             >Theme Mode</span
           >
           <div class="flex gap-2">
@@ -47,8 +43,8 @@ import { NgFor } from '@angular/common';
               (click)="speechService.setThemeMode(mode)"
               [class]="
                 speechService.themeMode === mode
-                  ? 'bg-blue-600 text-white border-blue-600'
-                  : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-600 hover:border-blue-500'
+                  ? 'bg-primary text-background border-primary'
+                  : 'bg-surface text-on-surface-variant border-outline hover:border-primary'
               "
               class="flex-1 px-3 py-2 text-xs font-medium uppercase tracking-wider rounded border transition-all capitalize"
             >
@@ -58,8 +54,7 @@ import { NgFor } from '@angular/common';
         </div>
 
         <div>
-          <span
-            class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2"
+          <span class="block text-sm font-medium text-on-surface mb-2"
             >Theme Family</span
           >
           <div class="grid grid-cols-2 gap-2">
@@ -68,8 +63,8 @@ import { NgFor } from '@angular/common';
               (click)="speechService.setThemeFamily(family)"
               [class]="
                 speechService.themeFamily === family
-                  ? 'bg-blue-600 text-white border-blue-600'
-                  : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-600 hover:border-blue-500'
+                  ? 'bg-primary text-background border-primary'
+                  : 'bg-surface text-on-surface-variant border-outline hover:border-primary'
               "
               class="px-3 py-2 text-xs font-medium uppercase tracking-wider rounded border transition-all capitalize"
             >

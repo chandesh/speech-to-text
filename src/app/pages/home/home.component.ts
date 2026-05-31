@@ -10,35 +10,31 @@ import { AuthService } from '../../services/auth/auth.service';
   imports: [CommonModule, RouterModule, NavbarComponent],
   template: `
     <app-navbar></app-navbar>
-    <div
-      class="min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-300"
-    >
+    <div class="min-h-screen bg-background transition-colors duration-300">
       <!-- Hero Section -->
       <section class="relative py-20 px-6 overflow-hidden">
         <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
           <div class="flex flex-col space-y-6 text-center lg:text-left">
             <h1
-              class="text-5xl lg:text-7xl font-extrabold tracking-tight text-slate-900 dark:text-white"
+              class="text-5xl lg:text-7xl font-extrabold tracking-tight text-on-surface"
             >
               Real-Time
-              <span class="text-blue-600 dark:text-blue-400"
-                >Speech to Text</span
-              >
+              <span class="text-primary">Speech to Text</span>
             </h1>
-            <p class="text-lg text-slate-600 dark:text-slate-400 max-w-2xl">
+            <p class="text-lg text-on-surface-variant max-w-2xl">
               Turn your voice into text instantly with our browser-based live
               transcription tool. Privacy-first, fast, and accurate.
             </p>
             <div class="flex flex-wrap gap-4 justify-center lg:justify-start">
               <a
                 routerLink="/transcriber"
-                class="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-semibold transition-all transform hover:scale-105 shadow-lg shadow-blue-500/30"
+                class="px-8 py-4 bg-primary hover:brightness-110 text-background rounded-2xl font-semibold transition-all transform hover:scale-105 shadow-lg shadow-primary/30"
               >
                 Start Transcribing
               </a>
               <a
                 routerLink="/login"
-                class="px-8 py-4 bg-white dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 rounded-2xl font-semibold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all"
+                class="px-8 py-4 bg-surface text-on-surface border border-outline rounded-2xl font-semibold hover:bg-surface-variant transition-all"
               >
                 Login
               </a>
@@ -49,21 +45,19 @@ import { AuthService } from '../../services/auth/auth.service';
               class="absolute -inset-4 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-3xl blur opacity-20 group-hover:opacity-30 transition-opacity"
             ></div>
             <div
-              class="relative bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-700 transform rotate-2 group-hover:rotate-0 transition-transform duration-500"
+              class="relative bg-surface p-6 rounded-3xl shadow-2xl border border-outline transform rotate-2 group-hover:rotate-0 transition-transform duration-500"
             >
               <div
-                class="flex items-center gap-3 mb-4 border-b border-slate-100 dark:border-slate-700 pb-3"
+                class="flex items-center gap-3 mb-4 border-b border-outline pb-3"
               >
                 <div class="w-3 h-3 rounded-full bg-red-400"></div>
                 <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
                 <div class="w-3 h-3 rounded-full bg-green-400"></div>
               </div>
-              <div
-                class="space-y-3 font-mono text-sm text-slate-700 dark:text-slate-300"
-              >
+              <div class="space-y-3 font-mono text-sm text-on-surface">
                 <p class="opacity-50">Recognizing voice...</p>
                 <p
-                  class="animate-pulse inline-block border-r-2 border-blue-500 pr-1"
+                  class="animate-pulse inline-block border-r-2 border-primary pr-1"
                 >
                   "Welcome to the future of speech recognition. This is a live
                   transcription preview..."
@@ -75,30 +69,30 @@ import { AuthService } from '../../services/auth/auth.service';
       </section>
 
       <!-- Features Section -->
-      <section class="py-20 px-6 bg-white dark:bg-slate-800/50">
+      <section class="py-20 px-6 bg-surface">
         <div class="max-w-7xl mx-auto">
           <div class="text-center mb-16">
-            <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-4">
+            <h2 class="text-3xl font-bold text-on-surface mb-4">
               Everything you need to transcribe
             </h2>
-            <p class="text-slate-600 dark:text-slate-400">
+            <p class="text-on-surface-variant">
               Powerful features designed for modern productivity
             </p>
           </div>
           <div class="grid md:grid-cols-3 gap-8">
             <div
               *ngFor="let feature of features"
-              class="p-8 rounded-3xl border border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 hover:border-blue-500 dark:hover:border-blue-400 transition-all group"
+              class="p-8 rounded-3xl border border-outline bg-surface hover:border-primary transition-all group"
             >
               <div
-                class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
+                class="w-12 h-12 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
               >
                 <span class="text-2xl">{{ feature.icon }}</span>
               </div>
-              <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">
+              <h3 class="text-xl font-bold text-on-surface mb-3">
                 {{ feature.title }}
               </h3>
-              <p class="text-slate-600 dark:text-slate-400">
+              <p class="text-on-surface-variant">
                 {{ feature.desc }}
               </p>
             </div>
@@ -107,25 +101,23 @@ import { AuthService } from '../../services/auth/auth.service';
       </section>
 
       <!-- How It Works -->
-      <section class="py-20 px-6 bg-slate-50 dark:bg-slate-900">
+      <section class="py-20 px-6 bg-background">
         <div class="max-w-5xl mx-auto text-center">
-          <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-16">
-            How It Works
-          </h2>
+          <h2 class="text-3xl font-bold text-on-surface mb-16">How It Works</h2>
           <div class="grid md:grid-cols-3 gap-12 relative">
             <div
               *ngFor="let step of steps; let i = index"
               class="flex flex-col items-center space-y-4 relative z-10"
             >
               <div
-                class="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mb-4 shadow-xl shadow-blue-500/40"
+                class="w-16 h-16 bg-primary text-background rounded-full flex items-center justify-center text-2xl font-bold mb-4 shadow-xl shadow-primary/40"
               >
                 {{ i + 1 }}
               </div>
-              <h3 class="text-xl font-bold text-slate-900 dark:text-white">
+              <h3 class="text-xl font-bold text-on-surface">
                 {{ step.title }}
               </h3>
-              <p class="text-slate-600 dark:text-slate-400">{{ step.desc }}</p>
+              <p class="text-on-surface-variant">{{ step.desc }}</p>
             </div>
           </div>
         </div>

@@ -14,10 +14,10 @@ import { AuthService } from '../../../services/auth/auth.service';
   imports: [ReactiveFormsModule, NgIf],
   template: `
     <div class="max-w-lg">
-      <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-4">
+      <h2 class="text-xl font-semibold text-on-surface mb-4">
         Profile & Account Settings
       </h2>
-      <p class="text-sm text-slate-500 mb-6">
+      <p class="text-sm text-on-surface-variant mb-6">
         Update your name and email address.
       </p>
 
@@ -40,14 +40,14 @@ import { AuthService } from '../../../services/auth/auth.service';
         <div>
           <label
             for="full_name"
-            class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
+            class="block text-sm font-medium text-on-surface mb-1"
             >Full Name</label
           >
           <input
             id="full_name"
             type="text"
             formControlName="full_name"
-            class="w-full px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500 transition-colors"
+            class="w-full px-4 py-2.5 bg-surface border border-outline rounded-lg text-sm text-on-surface focus:outline-none focus:border-primary transition-colors"
             [class.border-red-500]="
               profileForm.get('full_name')?.invalid &&
               profileForm.get('full_name')?.touched
@@ -57,14 +57,14 @@ import { AuthService } from '../../../services/auth/auth.service';
         <div>
           <label
             for="email"
-            class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
+            class="block text-sm font-medium text-on-surface mb-1"
             >Email</label
           >
           <input
             id="email"
             type="email"
             formControlName="email"
-            class="w-full px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500 transition-colors"
+            class="w-full px-4 py-2.5 bg-surface border border-outline rounded-lg text-sm text-on-surface focus:outline-none focus:border-primary transition-colors"
             [class.border-red-500]="
               profileForm.get('email')?.invalid &&
               profileForm.get('email')?.touched
@@ -74,7 +74,7 @@ import { AuthService } from '../../../services/auth/auth.service';
         <button
           type="submit"
           [disabled]="profileForm.invalid || isSubmitting()"
-          class="px-6 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          class="px-6 py-2.5 bg-primary text-background rounded-lg text-sm font-medium hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {{ isSubmitting() ? 'Saving...' : 'Save Changes' }}
         </button>
