@@ -45,7 +45,55 @@ services:
     networks:
       - speech-to-text-net
 
+  postgres:
+    image: postgres:16-alpine
+    container_name: speech-to-text-db
+    environment:
+      POSTGRES_USER: s2t
+      POSTGRES_PASSWORD: s2t_pass
+      POSTGRES_DB: speech_to_text
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U s2t -d speech_to_text"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - speech-to-text-net
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: speech-to-text-api
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgres://s2t:s2t_pass@postgres:5432/speech_to_text?sslmode=disable
+      JWT_SECRET: dev-secret-change-in-production
+      PORT: "8080"
+      ALLOWED_ORIGINS: http://localhost:4200
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/api/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - speech-to-text-net
+
 networks:
   speech-to-text-net:
     name: speech-to-text-net
     driver: bridge
+
+volumes:
+  pgdata:
