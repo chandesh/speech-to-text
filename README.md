@@ -1,24 +1,30 @@
 # Speech to Text
 
-A production-ready, mobile-first web application that converts speech to text in real-time using the Web Speech API. Built with Angular 21, Tailwind CSS, and designed for future backend integration.
+A mobile-first web application for real-time speech-to-text transcription using the Web Speech API. Includes JWT-based user authentication, profile management, and a Go + PostgreSQL backend.
 
 ## Features
 
-- Real-time speech-to-text transcription
+- Real-time speech-to-text transcription with interim results
 - Copy, clear, and download transcribed text
 - Word count display
 - Language selection (20+ languages)
-  - Theme selection (Gruvbox, Glassmorphic, Light, Dark, Oceanic-Light, Oceanic-Dark)
-  - Mobile-first responsive design
-
+- Theme system (gruvbox, glassmorphic, oceanic — each with light/dark mode)
+- User registration and JWT-based login
+- Profile management (name, email) and password change
+- App settings page with theme and language controls
+- Smart landing page — redirects authenticated users to transcriber
+- Sticky footer on all pages
+- Mobile-first responsive design
 - PWA support with offline capability
-- Pluggable speech provider architecture (browser API ready, backend stub prepared)
+- Pluggable speech provider architecture
 
 ## Tech Stack
 
 - **Frontend**: Angular 21 (standalone components)
-- **Styling**: Tailwind CSS v4
+- **Styling**: Tailwind CSS v4 via CDN, CSS custom properties
 - **State Management**: Angular Signals
+- **Backend**: Go, Gin, GORM, JWT, bcrypt
+- **Database**: PostgreSQL 16
 - **Testing**: Vitest with Playwright
 - **Containerization**: Docker + Docker Compose
 - **PWA**: Angular Service Worker
@@ -26,117 +32,111 @@ A production-ready, mobile-first web application that converts speech to text in
 ## Project Structure
 
 ```
-src/app/
-├── components/
-│   ├── recorder/          # Microphone recording button with state indicators
-│   ├── transcription/     # Live transcription display with interim/final text
-│   ├── controls/          # Copy, clear, and download actions
-│   └── settings/          # Language selector, dark mode, provider info
-├── services/
-│   └── speech/
-│       ├── speech-provider.interface.ts  # Abstraction layer for speech providers
-│       ├── speech.service.ts             # Facade service with signal-based state
-│       ├── browser-speech.service.ts     # Web Speech API implementation (Phase 1)
-│       └── api-speech.service.ts         # Backend API stub (Phase 2)
-├── core/                  # Core utilities and configuration
-├── shared/                # Shared directives and utilities
-├── app.ts                 # Root component
-├── app.config.ts          # Application configuration with PWA setup
-└── app.html               # Root template with responsive layout
+├── backend/
+│   ├── apps/auth/         # Register, login, refresh, logout
+│   ├── apps/user/         # Profile get/update, change password
+│   ├── core/config/       # Environment configuration
+│   ├── core/database/     # GORM connection
+│   ├── core/middleware/   # JWT auth, CORS, logger
+│   └── main.go            # Route registration, server entry
+├── src/app/
+│   ├── components/
+│   │   ├── navbar/        # Nav bar with auth-aware dropdown
+│   │   ├── recorder/      # Microphone button with state indicators
+│   │   ├── transcription/ # Live display with interim/final text
+│   │   ├── controls/      # Copy, clear, download actions
+│   │   └── footer/        # Sticky footer on all pages
+│   ├── pages/
+│   │   ├── home/          # Landing page, redirects if authenticated
+│   │   ├── login/         # Login form
+│   │   ├── register/      # Registration form
+│   │   ├── settings/      # Settings shell with tab navigation
+│   │   │   ├── profile/           # Edit name/email
+│   │   │   ├── change-password/   # Password change form
+│   │   │   └── app-settings/      # Theme and language controls
+│   │   └── transcriber/   # Main transcription page
+│   ├── services/
+│   │   ├── auth/          # JWT auth, profile CRUD, token storage
+│   │   └── speech/        # Speech provider interface + implementations
+│   ├── app.ts             # Root with theme init, footer shell
+│   ├── app.routes.ts      # Route definitions with AuthGuard
+│   └── styles.scss        # Theme CSS variables and Tailwind layers
+├── docker-compose.yml
+├── Makefile
+└── README.md
 ```
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 20+
-- npm 10+
-- Docker and Docker Compose (optional, for containerized deployment)
+- Node.js 20+, npm 10+
+- Go 1.26+ (for backend development)
+- Docker and Docker Compose
 - A modern browser with Web Speech API support (Chrome, Edge, Safari)
 
-### Quick Start (Local Development)
+### Full Stack
 
 ```bash
-# Install dependencies
+make stack-up
+```
+
+Frontend at http://localhost:4200, backend at http://localhost:1212.
+
+### Frontend Only
+
+```bash
 make install
-
-# Start Angular dev server (Host machine)
 make dev
-
-# Run tests
-make test
-
-# Build for production
-make build
 ```
 
-### Docker Deployment
+### Backend Only
 
 ```bash
-# Start production container
-make start
-
-# Rebuild and restart production container
-make rebuild
-
-# Start development container with hot-reload (Port 4201)
-make devstart
-
-# View logs
-make logs
-
-# Stop containers
-make stop
+make db-start
+make backend-rebuild
 ```
-
-The application will be available at:
-
-- Production: http://localhost:4200
-- Development: http://localhost:4201
 
 ## Architecture
 
+### Auth Flow
+
+```
+Register/Login → JWT tokens → localStorage (s2t_access_token, s2t_refresh_token, s2t_user)
+API calls      → Authorization: Bearer header
+AuthGuard      → Checks token expiry, redirects to /login
+```
+
 ### Speech Provider Pattern
 
-The application uses a pluggable architecture for speech recognition:
+Pluggable architecture via `SpeechProvider` interface. Switch by setting `voice-to-text-provider` in localStorage to `browser` or `api`.
 
-```
-SpeechProvider (interface)
-├── BrowserSpeechService (current - Web Speech API)
-└── ApiSpeechService (stub - ready for Go + Gin backend)
-```
+### Theme System
 
-The `SpeechService` facade manages state using Angular Signals and delegates speech operations to the active provider. This design allows switching between browser-based and API-based recognition with minimal code changes.
+CSS custom properties on `<html>` with `theme-{family}-{mode}` class. Three families (gruvbox, glassmorphic, oceanic) × 2 modes (light, dark). Persisted to localStorage.
 
 ### State Management
 
-All UI state is managed through Angular Signals:
+Angular Signals:
 
-- `finalTextSignal` - Completed transcription text
-- `interimTextSignal` - In-progress speech recognition
-- `stateSignal` - Recording state (idle, requesting, recording, error, unsupported)
-- `errorSignal` - Current error state
-- `languageSignal` - Selected language
-- `darkModeSignal` - Theme preference
-
-### Responsive Design
-
-Mobile-first layout with Tailwind CSS:
-
-- Sticky controls at bottom for easy thumb access
-- Large touch-friendly buttons (minimum 44px touch targets)
-- Flexible transcription area with auto-scroll
-- Settings panel with dropdown overlay
+- `finalTextSignal` / `interimTextSignal` — Transcription state
+- `stateSignal` — Recording state (idle, requesting, recording, error, unsupported)
+- `currentUser` — Authenticated user
+- `themeSignal` / `modeSignal` — Theme preferences
 
 ## Configuration
 
-### Environment Settings
+Settings persisted in localStorage:
 
-Settings are persisted in localStorage:
-
-- `voice-to-text-lang` - Selected language code (default: en-US)
-- `voice-to-text-provider` - Speech provider type (browser/api)
-- `voice-to-text-dark-mode` - Dark mode preference
+| Key                      | Description                    |
+| ------------------------ | ------------------------------ |
+| `voice-to-text-lang`     | Language code (default: en-US) |
+| `voice-to-text-provider` | Speech provider (browser/api)  |
+| `s2t_access_token`       | JWT access token               |
+| `s2t_refresh_token`      | JWT refresh token              |
+| `s2t_user`               | Cached user profile            |
+| `s2t_theme`              | Theme family                   |
+| `s2t_theme_mode`         | Theme mode (light/dark)        |
 
 ### Supported Languages
 
@@ -145,75 +145,10 @@ English (US/UK), Spanish, French, German, Italian, Portuguese, Japanese, Korean,
 ## Testing
 
 ```bash
-# Run all tests once
 make test
-
-# Run tests in watch mode
-make test:watch
-
-# Run specific test file
+make test-watch
 ng test --include=src/app/services/speech/speech.service.spec.ts
 ```
-
-Test coverage includes:
-
-- SpeechService state management
-- BrowserSpeechService observables
-- Component creation and injection
-- User interaction handlers
-- localStorage persistence
-
-## PWA Support
-
-The application includes full PWA configuration:
-
-- Service Worker for offline caching
-- Web App Manifest with icons
-- Theme color and display mode
-- Asset caching strategy
-
-## Future Backend Integration (Phase 2)
-
-The `ApiSpeechService` is prepared for integration with a Go + Gin backend:
-
-```
-POST /transcribe
-Content-Type: multipart/form-data
-
-audio: audio/webm file
-```
-
-Response:
-
-```json
-{
-  "transcript": "Transcribed text here"
-}
-```
-
-To switch to API mode:
-
-1. Set `voice-to-text-provider` to `api` in localStorage
-2. Configure `voice-to-text-api-url` with backend URL
-3. The app will stream audio chunks to the backend endpoint
-
-## Makefile Commands
-
-| Command               | Description                         |
-| --------------------- | ----------------------------------- |
-| `make install`        | Install npm dependencies            |
-| `make start`          | Start Angular dev server            |
-| `make test`           | Run unit tests                      |
-| `make test:watch`     | Run tests in watch mode             |
-| `make build`          | Production build                    |
-| `make clean`          | Remove build artifacts              |
-| `make docker-build`   | Build Docker image                  |
-| `make docker-up`      | Start production container          |
-| `make docker-dev-up`  | Start dev container with hot-reload |
-| `make docker-down`    | Stop containers                     |
-| `make docker-rebuild` | Rebuild and restart                 |
-| `make docker-logs`    | View container logs                 |
-| `make docker-clean`   | Remove all Docker resources         |
 
 ## Browser Support
 

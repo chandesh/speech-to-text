@@ -23,6 +23,14 @@ const STORAGE_KEYS = {
   user: 's2t_user',
 };
 
+async function safeJson(res: Response): Promise<any> {
+  try {
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
 const API_BASE = 'http://localhost:1212/api';
 
 @Injectable({
@@ -87,8 +95,8 @@ export class AuthService {
         body: JSON.stringify({ email, password }),
       });
       if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || 'Login failed');
+        const err = await safeJson(res);
+        throw new Error(err?.error || `Server error (${res.status})`);
       }
       const data: AuthResponse = await res.json();
       this.persistAuth(data);
@@ -111,8 +119,8 @@ export class AuthService {
         body: JSON.stringify(userData),
       });
       if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || 'Registration failed');
+        const err = await safeJson(res);
+        throw new Error(err?.error || `Server error (${res.status})`);
       }
       const data: AuthResponse = await res.json();
       this.persistAuth(data);
@@ -129,8 +137,8 @@ export class AuthService {
       headers: { Authorization: `Bearer ${token}` },
     });
     if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || 'Failed to fetch profile');
+      const err = await safeJson(res);
+      throw new Error(err?.error || `Server error (${res.status})`);
     }
     return await res.json();
   }
@@ -150,8 +158,8 @@ export class AuthService {
       body: JSON.stringify(data),
     });
     if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || 'Failed to update profile');
+      const err = await safeJson(res);
+      throw new Error(err?.error || `Server error (${res.status})`);
     }
     const user = await res.json();
     this._currentUser.set(user);
@@ -177,8 +185,8 @@ export class AuthService {
       }),
     });
     if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || 'Failed to change password');
+      const err = await safeJson(res);
+      throw new Error(err?.error || `Server error (${res.status})`);
     }
   }
 
