@@ -1,12 +1,15 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { FooterComponent } from '../../components/footer/footer.component';
 
 @Component({
   standalone: true,
   selector: 'app-home',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, NavbarComponent, FooterComponent],
   template: `
+    <app-navbar></app-navbar>
     <div class="min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
       <!-- Hero Section -->
       <section class="relative py-20 px-6 overflow-hidden">
@@ -79,6 +82,7 @@ import { RouterModule } from '@angular/router';
         </div>
       </section>
     </div>
+    <app-footer></app-footer>
   `,
   styles: [],
 })

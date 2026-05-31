@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
@@ -34,21 +34,17 @@ import { AuthService } from '../../services/auth/auth.service';
               >Home</a
             >
             <a
+              *ngIf="authService.isLoggedIn()"
               routerLink="/transcriber"
               class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
               >Transcriber</a
-            >
-            <a
-              href="#features"
-              class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-              >Features</a
             >
           </div>
         </div>
 
         <div class="flex items-center gap-4">
           <div
-            *ngIf="!authService.isAuthenticated()"
+            *ngIf="!authService.isLoggedIn()"
             class="flex items-center gap-3"
           >
             <a
@@ -64,7 +60,7 @@ import { AuthService } from '../../services/auth/auth.service';
           </div>
 
           <div
-            *ngIf="authService.isAuthenticated()"
+            *ngIf="authService.isLoggedIn()"
             class="flex items-center gap-3 p-1 pl-2 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700"
           >
             <div
@@ -108,9 +104,11 @@ import { AuthService } from '../../services/auth/auth.service';
   `,
 })
 export class NavbarComponent {
-  constructor(public authService: AuthService) {}
+  authService = inject(AuthService);
+  private router = inject(Router);
 
   logout() {
     this.authService.logout();
+    this.router.navigate(['/']);
   }
 }

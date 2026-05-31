@@ -45,6 +45,21 @@ export class AuthService {
     return localStorage.getItem(STORAGE_KEYS.accessToken);
   }
 
+  getToken(): string | null {
+    return this.getAccessToken();
+  }
+
+  isLoggedIn(): boolean {
+    const token = this.getAccessToken();
+    if (!token) return false;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.exp * 1000 > Date.now();
+    } catch {
+      return false;
+    }
+  }
+
   private persistAuth(resp: AuthResponse): void {
     localStorage.setItem(STORAGE_KEYS.accessToken, resp.access_token);
     localStorage.setItem(STORAGE_KEYS.refreshToken, resp.refresh_token);

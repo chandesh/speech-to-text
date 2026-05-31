@@ -14,7 +14,7 @@ func Load() *Config {
 		DatabaseURL:    getEnv("DATABASE_URL", "postgres://s2t:s2t_pass@localhost:5432/speech_to_text?sslmode=disable"),
 		JWTSecret:      getEnv("JWT_SECRET", "dev-secret-change-in-production"),
 		Port:           getEnv("PORT", "1212"),
-		AllowedOrigins: getEnv("ALLOWED_ORIGINS", "http://localhost:4200"),
+		AllowedOrigins: getEnv("ALLOWED_ORIGINS", "http://localhost:4200,http://localhost:4201"),
 	}
 }
 
