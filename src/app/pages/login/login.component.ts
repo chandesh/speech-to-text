@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ReactiveFormsModule,
@@ -32,6 +32,14 @@ import { Router, RouterModule } from '@angular/router';
             Please enter your details to log in
           </p>
         </div>
+
+        @if (errorMessage()) {
+          <div
+            class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 rounded-2xl px-4 py-3 text-sm text-center"
+          >
+            {{ errorMessage() }}
+          </div>
+        }
 
         <form
           [formGroup]="loginForm"
@@ -80,19 +88,6 @@ import { Router, RouterModule } from '@angular/router';
             </div>
           </div>
 
-          <div class="flex items-center gap-2">
-            <input
-              type="checkbox"
-              id="remember"
-              class="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
-            />
-            <label
-              for="remember"
-              class="text-sm text-slate-600 dark:text-slate-400 cursor-pointer"
-              >Remember me</label
-            >
-          </div>
-
           <button
             type="submit"
             [disabled]="loginForm.invalid || authService.isLoading()"
@@ -101,36 +96,6 @@ import { Router, RouterModule } from '@angular/router';
             {{ authService.isLoading() ? 'Signing in...' : 'Sign In' }}
           </button>
         </form>
-
-        <div class="relative space-y-6">
-          <div class="relative flex items-center">
-            <div
-              class="flex-grow border-t border-slate-200 dark:border-slate-700"
-            ></div>
-            <span
-              class="flex-shrink mx-4 text-xs text-slate-400 uppercase font-medium"
-              >Or continue with</span
-            >
-            <div
-              class="flex-grow border-t border-slate-200 dark:border-slate-700"
-            ></div>
-          </div>
-
-          <div class="grid grid-cols-2 gap-4">
-            <button
-              class="py-3 px-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all flex items-center justify-center gap-2 text-sm font-medium"
-            >
-              <img src="https://www.google.com/favicon.ico" class="w-4 h-4" />
-              Google
-            </button>
-            <button
-              class="py-3 px-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all flex items-center justify-center gap-2 text-sm font-medium"
-            >
-              <img src="https://github.com/favicon.ico" class="w-4 h-4" />
-              GitHub
-            </button>
-          </div>
-        </div>
 
         <p class="text-center text-sm text-slate-500 dark:text-slate-400">
           Don't have an account?
@@ -148,6 +113,7 @@ import { Router, RouterModule } from '@angular/router';
 export class LoginComponent {
   showPassword = false;
   loginForm: FormGroup;
+  errorMessage = signal('');
 
   constructor(
     private fb: FormBuilder,
@@ -162,8 +128,15 @@ export class LoginComponent {
 
   async onSubmit() {
     if (this.loginForm.invalid) return;
-    const { email, password } = this.loginForm.value;
-    await this.authService.login(email, password);
-    this.router.navigate(['/transcriber']);
+    this.errorMessage.set('');
+    try {
+      const { email, password } = this.loginForm.value;
+      await this.authService.login(email, password);
+      this.router.navigate(['/transcriber']);
+    } catch (err) {
+      this.errorMessage.set(
+        err instanceof Error ? err.message : 'Login failed',
+      );
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ReactiveFormsModule,
@@ -32,6 +32,22 @@ import { Router, RouterModule } from '@angular/router';
             Join thousands of users today
           </p>
         </div>
+
+        @if (errorMessage()) {
+          <div
+            class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 rounded-2xl px-4 py-3 text-sm text-center"
+          >
+            {{ errorMessage() }}
+          </div>
+        }
+
+        @if (successMessage()) {
+          <div
+            class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 rounded-2xl px-4 py-3 text-sm text-center"
+          >
+            {{ successMessage() }}
+          </div>
+        }
 
         <form
           [formGroup]="regForm"
@@ -102,19 +118,6 @@ import { Router, RouterModule } from '@angular/router';
             </div>
           </div>
 
-          <div class="flex items-center gap-2">
-            <input
-              type="checkbox"
-              id="terms"
-              class="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
-            />
-            <label
-              for="terms"
-              class="text-sm text-slate-600 dark:text-slate-400 cursor-pointer"
-              >I agree to the Terms & Conditions</label
-            >
-          </div>
-
           <button
             type="submit"
             [disabled]="regForm.invalid || authService.isLoading()"
@@ -142,6 +145,8 @@ import { Router, RouterModule } from '@angular/router';
 export class RegisterComponent {
   showPassword = false;
   regForm: FormGroup;
+  errorMessage = signal('');
+  successMessage = signal('');
 
   constructor(
     private fb: FormBuilder,
@@ -167,8 +172,17 @@ export class RegisterComponent {
 
   async onSubmit() {
     if (this.regForm.invalid) return;
+    this.errorMessage.set('');
+    this.successMessage.set('');
     const { fullName, email, password } = this.regForm.value;
-    await this.authService.register({ email, password, full_name: fullName });
-    this.router.navigate(['/transcriber']);
+    try {
+      await this.authService.register({ email, password, full_name: fullName });
+      this.successMessage.set('Account created successfully! Redirecting...');
+      setTimeout(() => this.router.navigate(['/transcriber']), 1500);
+    } catch (err) {
+      this.errorMessage.set(
+        err instanceof Error ? err.message : 'Registration failed',
+      );
+    }
   }
 }
