@@ -118,6 +118,66 @@ export class AuthService {
     }
   }
 
+  async getProfile(): Promise<User> {
+    const token = this.getAccessToken();
+    if (!token) throw new Error('Not authenticated');
+    const res = await fetch(`${API_BASE}/user/profile`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || 'Failed to fetch profile');
+    }
+    return await res.json();
+  }
+
+  async updateProfile(data: {
+    full_name: string;
+    email: string;
+  }): Promise<User> {
+    const token = this.getAccessToken();
+    if (!token) throw new Error('Not authenticated');
+    const res = await fetch(`${API_BASE}/user/profile`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || 'Failed to update profile');
+    }
+    const user = await res.json();
+    this._currentUser.set(user);
+    localStorage.setItem(STORAGE_KEYS.user, JSON.stringify(user));
+    return user;
+  }
+
+  async changePassword(
+    currentPassword: string,
+    newPassword: string,
+  ): Promise<void> {
+    const token = this.getAccessToken();
+    if (!token) throw new Error('Not authenticated');
+    const res = await fetch(`${API_BASE}/user/change-password`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        current_password: currentPassword,
+        new_password: newPassword,
+      }),
+    });
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || 'Failed to change password');
+    }
+  }
+
   async logout(): Promise<void> {
     const refreshToken = localStorage.getItem(STORAGE_KEYS.refreshToken);
     if (refreshToken) {
