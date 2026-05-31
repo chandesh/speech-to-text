@@ -37,8 +37,12 @@ export class AuthService {
   isLoading = computed(() => this._isLoading());
 
   private loadFromStorage(): User | null {
-    const stored = localStorage.getItem(STORAGE_KEYS.user);
-    return stored ? JSON.parse(stored) : null;
+    try {
+      const stored = localStorage.getItem(STORAGE_KEYS.user);
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      return null;
+    }
   }
 
   getAccessToken(): string | null {

@@ -233,7 +233,8 @@ export class NavbarComponent {
     const name = this.authService.currentUser()?.full_name || '';
     if (!name) return '?';
     return name
-      .split(' ')
+      .split(/\s+/)
+      .filter(Boolean)
       .map((n) => n[0])
       .join('')
       .toUpperCase()
@@ -248,9 +249,9 @@ export class NavbarComponent {
     this.dropdownOpen = false;
   }
 
-  logout(): void {
+  async logout(): Promise<void> {
     this.dropdownOpen = false;
-    this.authService.logout();
+    await this.authService.logout();
     this.router.navigate(['/']);
   }
 }
