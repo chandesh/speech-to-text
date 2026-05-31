@@ -7,6 +7,13 @@ import (
 	"gorm.io/gorm"
 )
 
+var (
+	ErrEmailAlreadyRegistered = errors.New("email already registered")
+	ErrInvalidCredentials     = errors.New("invalid email or password")
+	ErrInvalidRefreshToken    = errors.New("invalid or expired refresh token")
+	ErrUserNotFound           = errors.New("user not found")
+)
+
 type AuthService struct {
 	db              *gorm.DB
 	passwordService *PasswordService
@@ -45,7 +52,7 @@ func (s *AuthService) Register(input *RegisterInput) (*AuthResponse, error) {
 			return nil, err
 		}
 	} else {
-		return nil, errors.New("email already registered")
+		return nil, ErrEmailAlreadyRegistered
 	}
 
 	hash, err := s.passwordService.Hash(input.Password)
@@ -78,11 +85,11 @@ func (s *AuthService) Register(input *RegisterInput) (*AuthResponse, error) {
 func (s *AuthService) Login(input *LoginInput) (*AuthResponse, error) {
 	var user models.User
 	if err := s.db.Where("email = ?", input.Email).First(&user).Error; err != nil {
-		return nil, errors.New("invalid email or password")
+		return nil, ErrInvalidCredentials
 	}
 
 	if !s.passwordService.Compare(user.PasswordHash, input.Password) {
-		return nil, errors.New("invalid email or password")
+		return nil, ErrInvalidCredentials
 	}
 
 	pair, err := s.tokenService.GenerateTokenPair(&user)
@@ -103,7 +110,7 @@ func (s *AuthService) Refresh(rawRefreshToken string) (*TokenPair, error) {
 		return nil, err
 	}
 	if refreshToken == nil {
-		return nil, errors.New("invalid or expired refresh token")
+		return nil, ErrInvalidRefreshToken
 	}
 
 	if err := s.tokenService.RevokeToken(refreshToken.ID); err != nil {
@@ -112,7 +119,7 @@ func (s *AuthService) Refresh(rawRefreshToken string) (*TokenPair, error) {
 
 	var user models.User
 	if err := s.db.First(&user, "id = ?", refreshToken.UserID).Error; err != nil {
-		return nil, errors.New("user not found")
+		return nil, ErrUserNotFound
 	}
 
 	pair, err := s.tokenService.GenerateTokenPair(&user)
@@ -129,7 +136,7 @@ func (s *AuthService) Logout(rawRefreshToken string) error {
 		return err
 	}
 	if refreshToken == nil {
-		return errors.New("invalid refresh token")
+		return ErrInvalidRefreshToken
 	}
 
 	return s.tokenService.RevokeToken(refreshToken.ID)
