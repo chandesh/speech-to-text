@@ -9,7 +9,7 @@ import { Component } from '@angular/core';
   selector: 'app-host',
   template: '<app-recorder></app-recorder>',
   standalone: true,
-  imports: [RecorderComponent]
+  imports: [RecorderComponent],
 })
 class HostComponent {}
 
@@ -19,7 +19,7 @@ describe('RecorderComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HostComponent],
-      providers: [BrowserSpeechService]
+      providers: [BrowserSpeechService],
     });
     const fixture = TestBed.createComponent(HostComponent);
     component = fixture.debugElement.children[0].componentInstance;
@@ -35,10 +35,10 @@ describe('RecorderComponent', () => {
   });
 
   it('should return idle status text', () => {
-    expect(component.getStatusText()).toContain('Tap to start');
+    expect(component.statusText()).toContain('Tap to start');
   });
 
   it('should return correct aria label for idle state', () => {
-    expect(component.getAriaLabel()).toBe('Start recording');
+    expect(component.ariaLabel()).toBe('Start recording');
   });
 });

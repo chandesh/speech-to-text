@@ -6,11 +6,18 @@ import { BrowserSpeechService } from './browser-speech.service';
 describe('SpeechService', () => {
   let service: SpeechService;
 
+  function removeThemeClasses() {
+    const classes = Array.from(document.documentElement.classList).filter((c) =>
+      c.startsWith('theme-'),
+    );
+    document.documentElement.classList.remove(...classes);
+  }
+
   beforeEach(() => {
     localStorage.clear();
-    document.documentElement.classList.remove('dark');
+    removeThemeClasses();
     TestBed.configureTestingModule({
-      providers: [BrowserSpeechService]
+      providers: [BrowserSpeechService],
     });
     service = TestBed.inject(SpeechService);
   });
@@ -18,7 +25,7 @@ describe('SpeechService', () => {
   afterEach(() => {
     service.ngOnDestroy();
     localStorage.clear();
-    document.documentElement.classList.remove('dark');
+    removeThemeClasses();
   });
 
   it('should be created', () => {
@@ -45,12 +52,8 @@ describe('SpeechService', () => {
     expect(service.wordCount()).toBe(0);
   });
 
-  it('should support browser provider by default', () => {
-    expect(service.provider).toBe('browser');
-  });
-
-  it('should have dark mode disabled by default', () => {
-    expect(service.darkMode).toBe(false);
+  it('should have dark mode by default', () => {
+    expect(service.themeMode).toBe('dark');
   });
 
   it('should clear text', () => {
@@ -65,25 +68,29 @@ describe('SpeechService', () => {
     expect(localStorage.getItem('voice-to-text-lang')).toBe('es-ES');
   });
 
-  it('should toggle dark mode', () => {
-    service.toggleDarkMode();
-    expect(service.darkMode).toBe(true);
-    expect(document.documentElement.classList.contains('dark')).toBe(true);
+  it('should toggle theme mode', () => {
+    service.setThemeMode('light');
+    expect(service.themeMode).toBe('light');
+    expect(
+      document.documentElement.classList.contains('theme-gruvbox-light'),
+    ).toBe(true);
 
-    service.toggleDarkMode();
-    expect(service.darkMode).toBe(false);
-    expect(document.documentElement.classList.contains('dark')).toBe(false);
+    service.setThemeMode('dark');
+    expect(service.themeMode).toBe('dark');
+    expect(
+      document.documentElement.classList.contains('theme-gruvbox-dark'),
+    ).toBe(true);
   });
 
-  it('should restore dark mode from localStorage', () => {
-    localStorage.setItem('voice-to-text-dark-mode', 'true');
-    document.documentElement.classList.add('dark');
+  it('should restore theme from localStorage', () => {
+    localStorage.setItem('voice-to-text-theme', 'oceanic-light');
     TestBed.resetTestingModule();
     TestBed.configureTestingModule({
-      providers: [BrowserSpeechService]
+      providers: [BrowserSpeechService],
     });
     const restoredService = TestBed.inject(SpeechService);
-    expect(restoredService.darkMode).toBe(true);
+    expect(restoredService.themeFamily).toBe('oceanic');
+    expect(restoredService.themeMode).toBe('light');
     restoredService.ngOnDestroy();
   });
 
@@ -91,7 +98,7 @@ describe('SpeechService', () => {
     localStorage.setItem('voice-to-text-lang', 'fr-FR');
     TestBed.resetTestingModule();
     TestBed.configureTestingModule({
-      providers: [BrowserSpeechService]
+      providers: [BrowserSpeechService],
     });
     const restoredService = TestBed.inject(SpeechService);
     expect(restoredService.language).toBe('fr-FR');
